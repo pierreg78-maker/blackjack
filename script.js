@@ -1,14 +1,10 @@
-
 "use strict";
 
-console.log("Le script Blackjack est bien chargé.");
+document.getElementById("gold").textContent = "TEST";
 
-const dealButton = document.getElementById("dealBtn");
-const messageElement = document.getElementById("message");
-const goldElement = document.getElementById("gold");
-
-goldElement.textContent = "TEST";
-
-dealButton.addEventListener("click", function () {
-    messageElement.textContent = "Le bouton Distribuer fonctionne !";
-});
+document
+    .getElementById("dealBtn")
+    .addEventListener("click", function () {
+        document.getElementById("message").textContent =
+            "Le bouton Distribuer fonctionne !";
+    });
