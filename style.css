@@ -630,6 +630,19 @@ button:disabled{
         height:25px;
         font-size:15px;
     }
+       .betBox{
+        width:100%;
+        justify-content:center;
+    }
+
+    .topBar{
+        justify-content:center;
+    }
+
+    .betButton{
+        min-width:42px;
+        padding:7px 10px;
+    }
 }
 
 @media(prefers-reduced-motion:reduce){
