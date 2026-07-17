@@ -22,6 +22,11 @@ const dealButton = document.getElementById("dealBtn");
 const hitButton = document.getElementById("hitBtn");
 const standButton = document.getElementById("standBtn");
 const newButton = document.getElementById("newBtn");
+const goldElement = document.getElementById("gold");
+
+const betButtons = document.querySelectorAll(
+    ".betButton"
+);
 
 /* =========================
    RÉGLAGES D'ANIMATION
@@ -43,6 +48,9 @@ let dealerHand = [];
 
 let roundActive = false;
 let dealerCardHidden = true;
+let gold = 100;
+let selectedBet = 10;
+let currentBet = 0;
 
 /* =========================
    OUTILS
@@ -433,6 +441,108 @@ function setMessage(text) {
 }
 
 /* =========================
+   PIÈCES D'OR ET MISES
+========================= */
+
+function updateGoldDisplay() {
+    goldElement.textContent = gold;
+}
+
+function updateBetButtons() {
+    betButtons.forEach(button => {
+        const value = Number(
+            button.dataset.bet
+        );
+
+        button.classList.toggle(
+            "active",
+            value === selectedBet
+        );
+
+        button.disabled =
+            roundActive ||
+            animationInProgress ||
+            value > gold;
+    });
+}
+
+function selectBet(event) {
+    if (roundActive || animationInProgress) {
+        return;
+    }
+
+    const newBet = Number(
+        event.currentTarget.dataset.bet
+    );
+
+    if (newBet > gold) {
+        setMessage(
+            "Vous n'avez pas assez de pièces d'or."
+        );
+
+        return;
+    }
+
+    selectedBet = newBet;
+
+    updateBetButtons();
+
+    setMessage(
+        `Mise choisie : ${selectedBet} pièces d'or.`
+    );
+}
+
+function placeBet() {
+    if (selectedBet > gold) {
+        setMessage(
+            "Vous n'avez pas assez de pièces d'or."
+        );
+
+        return false;
+    }
+
+    currentBet = selectedBet;
+    gold -= currentBet;
+
+    updateGoldDisplay();
+    updateBetButtons();
+
+    return true;
+}
+
+function payWin() {
+    gold += currentBet * 2;
+}
+
+function payDraw() {
+    gold += currentBet;
+}
+
+function payBlackjack() {
+    gold += currentBet +
+        (currentBet * 1.5);
+}
+
+function finishPayment(result) {
+    if (result === "win") {
+        payWin();
+    }
+
+    if (result === "draw") {
+        payDraw();
+    }
+
+    if (result === "blackjack") {
+        payBlackjack();
+    }
+
+    currentBet = 0;
+
+    updateGoldDisplay();
+    updateBetButtons();
+}
+
+/* =========================
    GESTION DES BOUTONS
 ========================= */
 
@@ -495,7 +605,9 @@ async function startRound() {
     if (roundActive || animationInProgress) {
         return;
     }
-
+if (!placeBet()) {
+    return;
+}
     animationInProgress = true;
 
     lockButtons();
@@ -607,25 +719,27 @@ async function resolveInitialBlackjack() {
 
     if (playerBJ && dealerBJ) {
 
-        finishRound(
-            "Égalité : deux blackjacks."
-        );
+      finishRound(
+    "Égalité : deux blackjacks.",
+    "draw"
+);
 
         return;
     }
 
     if (playerBJ) {
 
-        finishRound(
-            "Blackjack ! Vous gagnez !"
-        );
-
+       finishRound(
+    `Blackjack ! Gain : ${currentBet * 1.5} pièces d'or.`,
+    "blackjack"
+);
         return;
     }
 
     finishRound(
-        "Le croupier a un blackjack."
-    );
+    "Le croupier a un blackjack.",
+    "loss"
+);
 }
 
 /* =========================
@@ -666,8 +780,9 @@ async function hit() {
         animationInProgress = false;
 
         finishRound(
-            "Vous dépassez 21."
-        );
+    "Vous dépassez 21.",
+    "loss"
+);
 
         return;
     }
@@ -748,9 +863,10 @@ function determineWinner() {
 
     if (dealerScore > 21) {
 
-        finishRound(
-            "Le croupier dépasse 21. Vous gagnez !"
-        );
+       finishRound(
+    "Le croupier dépasse 21. Vous gagnez !",
+    "win"
+);
 
         return;
     }
@@ -758,40 +874,42 @@ function determineWinner() {
     if (playerScore > dealerScore) {
 
         finishRound(
-            "Votre main est la meilleure. Vous gagnez !"
-        );
+    "Votre main est la meilleure. Vous gagnez !",
+    "win"
+);
 
         return;
     }
 
     if (playerScore < dealerScore) {
 
-        finishRound(
-            "Le croupier gagne cette partie."
-        );
+       finishRound(
+    "Le croupier gagne cette partie.",
+    "loss"
+);
 
         return;
     }
 
-    finishRound("Égalité !");
+    finishRound(
+    "Égalité ! Votre mise vous est rendue.",
+    "draw"
+);
 }
 
 /* =========================
    FIN DE PARTIE
 ========================= */
 
-function finishRound(message) {
-
+function finishRound(message, result) {
     roundActive = false;
-
     dealerCardHidden = false;
-
     animationInProgress = false;
 
+    finishPayment(result);
+
     updateScores();
-
     enableFinishedButtons();
-
     setMessage(message);
 }
 
@@ -824,7 +942,8 @@ function resetTable() {
     standButton.disabled = true;
 
     newButton.disabled = true;
-
+updateGoldDisplay();
+updateBetButtons();
     setMessage(
         "Cliquez sur « Distribuer »."
     );
@@ -857,5 +976,10 @@ newButton.addEventListener(
 /* =========================
    INITIALISATION
 ========================= */
-
+betButtons.forEach(button => {
+    button.addEventListener(
+        "click",
+        selectBet
+    );
+});
 resetTable();
