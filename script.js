@@ -313,123 +313,211 @@ function enableFinishedButtons(){
 
 }
 /* ==========================================================
-   DÉBUT D’UNE PARTIE
-   ========================================================== */
+   RÉVÉLATION DE LA CARTE CACHÉE
+========================================================== */
 
-function startRound() {
-    if (roundActive) {
-        return;
-    }
+async function revealDealerCard(){
 
-    deck = shuffleDeck(createDeck());
+    if(!dealerCardHidden) return;
 
-    playerHand = [
-        drawCard(),
-        drawCard()
-    ];
-
-    dealerHand = [
-        drawCard(),
-        drawCard()
-    ];
-
-    roundActive = true;
-    dealerCardHidden = true;
+    dealerCardHidden=false;
 
     renderGame();
-    enablePlayerButtons();
 
-    const playerHasBlackjack = isBlackjack(playerHand);
-    const dealerHasBlackjack = isBlackjack(dealerHand);
+    await wait(DEAL_DELAY);
 
-    if (playerHasBlackjack || dealerHasBlackjack) {
-        resolveInitialBlackjack();
-        return;
-    }
-
-    setMessage("À vous de jouer : tirer ou rester ?");
 }
 
 /* ==========================================================
-   BLACKJACK À LA DISTRIBUTION
-   ========================================================== */
+   DÉBUT D'UNE PARTIE
+========================================================== */
 
-function resolveInitialBlackjack() {
-    dealerCardHidden = false;
-    renderGame();
+async function startRound(){
 
-    const playerHasBlackjack = isBlackjack(playerHand);
-    const dealerHasBlackjack = isBlackjack(dealerHand);
+    if(roundActive || animationInProgress) return;
 
-    if (playerHasBlackjack && dealerHasBlackjack) {
-        finishRound("Égalité : vous avez tous les deux un blackjack !");
+    animationInProgress=true;
+
+    lockButtons();
+
+    deck=shuffleDeck(createDeck());
+
+    playerHand=[];
+    dealerHand=[];
+
+    roundActive=true;
+    dealerCardHidden=true;
+
+    dealerCardsElement.innerHTML="";
+    playerCardsElement.innerHTML="";
+
+    updateScores();
+
+    setMessage("Distribution des cartes...");
+
+    // joueur
+    const p1=drawCard();
+    playerHand.push(p1);
+    appendAnimatedCard(playerCardsElement,p1);
+
+    await wait(DEAL_DELAY);
+
+    // croupier
+    const d1=drawCard();
+    dealerHand.push(d1);
+    appendAnimatedCard(dealerCardsElement,d1);
+
+    await wait(DEAL_DELAY);
+
+    // joueur
+    const p2=drawCard();
+    playerHand.push(p2);
+    appendAnimatedCard(playerCardsElement,p2);
+
+    await wait(DEAL_DELAY);
+
+    // carte cachée
+    const d2=drawCard();
+    dealerHand.push(d2);
+    appendAnimatedCard(dealerCardsElement,d2,true);
+
+    await wait(DEAL_DELAY);
+
+    animationInProgress=false;
+
+    if(isBlackjack(playerHand) || isBlackjack(dealerHand)){
+
+        await resolveInitialBlackjack();
         return;
+
     }
 
-    if (playerHasBlackjack) {
+    enablePlayerButtons();
+
+    setMessage("À vous de jouer.");
+
+}
+
+/* ==========================================================
+   BLACKJACK NATUREL
+========================================================== */
+
+async function resolveInitialBlackjack(){
+
+    animationInProgress=true;
+
+    lockButtons();
+
+    await revealDealerCard();
+
+    const playerBJ=isBlackjack(playerHand);
+    const dealerBJ=isBlackjack(dealerHand);
+
+    animationInProgress=false;
+
+    if(playerBJ && dealerBJ){
+
+        finishRound("Égalité : deux blackjacks.");
+        return;
+
+    }
+
+    if(playerBJ){
+
         finishRound("Blackjack ! Vous gagnez !");
         return;
+
     }
 
     finishRound("Le croupier a un blackjack.");
+
 }
 
 /* ==========================================================
-   ACTION : TIRER
-   ========================================================== */
+   TIRER
+========================================================== */
 
-function hit() {
-    if (!roundActive) {
+async function hit(){
+
+    if(!roundActive || animationInProgress) return;
+
+    animationInProgress=true;
+
+    lockButtons();
+
+    const card=drawCard();
+
+    playerHand.push(card);
+
+    appendAnimatedCard(playerCardsElement,card);
+
+    await wait(DEAL_DELAY);
+
+    const score=calculateScore(playerHand);
+
+    if(score>21){
+
+        await revealDealerCard();
+
+        animationInProgress=false;
+
+        finishRound("Vous dépassez 21.");
+
         return;
+
     }
 
-    playerHand.push(drawCard());
+    if(score===21){
 
-    renderGame();
+        animationInProgress=false;
 
-    const playerScore = calculateScore(playerHand);
+        await stand();
 
-    if (playerScore > 21) {
-        dealerCardHidden = false;
-        renderGame();
+        return;
 
-        finishRound(
-            "Vous dépassez 21. Le croupier gagne."
+    }
+
+    animationInProgress=false;
+
+    enablePlayerButtons();
+
+    setMessage("Tirer ou rester ?");
+
+}
+
+/* ==========================================================
+   RESTER
+========================================================== */
+
+async function stand(){
+
+    if(!roundActive || animationInProgress) return;
+
+    animationInProgress=true;
+
+    lockButtons();
+
+    await revealDealerCard();
+
+    while(calculateScore(dealerHand)<17){
+
+        const card=drawCard();
+
+        dealerHand.push(card);
+
+        appendAnimatedCard(
+            dealerCardsElement,
+            card
         );
 
-        return;
+        await wait(DEAL_DELAY);
+
     }
 
-    if (playerScore === 21) {
-        stand();
-        return;
-    }
-
-    setMessage("Vous pouvez encore tirer ou rester.");
-}
-
-/* ==========================================================
-   ACTION : RESTER
-   ========================================================== */
-
-function stand() {
-    if (!roundActive) {
-        return;
-    }
-
-    dealerCardHidden = false;
-
-    /*
-     * Le croupier tire jusqu’à atteindre au moins 17.
-     */
-
-    while (calculateScore(dealerHand) < 17) {
-        dealerHand.push(drawCard());
-    }
-
-    renderGame();
+    animationInProgress=false;
 
     determineWinner();
+
 }
 
 /* ==========================================================
