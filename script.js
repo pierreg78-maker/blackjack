@@ -1,4 +1,4 @@
-```javascript
+
 /* ==========================================================
    BLACKJACK - ATELIER MÉMO
    Partie 3 : moteur du jeu + pièces d'or
