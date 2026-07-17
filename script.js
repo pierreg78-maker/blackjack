@@ -151,33 +151,105 @@ function isBlackjack(hand){
    CARTES
 ========================================================== */
 
-function createCardElement(card,hidden=false){
+function createCardElement(card, hidden = false){
 
-    const div=document.createElement("div");
+    const cardElement = document.createElement("div");
 
-    div.className="card";
+    cardElement.className = "card";
+
+    /* ======================================================
+       DOS DE CARTE
+    ====================================================== */
 
     if(hidden){
 
-        div.classList.add("card-hidden");
-        div.dataset.hidden="true";
-        div.textContent="🂠";
+        cardElement.classList.add("card-hidden");
+        cardElement.dataset.hidden = "true";
 
-        return div;
+        cardElement.innerHTML = `
+            <div class="card-back-inner">
+                <div class="card-back-star">✦ ✦ ✦</div>
+
+                <div class="card-back-title">
+                    Atelier<br>
+                    Mémo
+                </div>
+
+                <div class="card-back-star">✦ ✦ ✦</div>
+            </div>
+        `;
+
+        return cardElement;
 
     }
 
-    div.dataset.hidden="false";
+    cardElement.dataset.hidden = "false";
 
-    if(card.suit==="♥" || card.suit==="♦"){
+    const isRed =
+        card.suit === "♥" ||
+        card.suit === "♦";
 
-        div.classList.add("red");
+    if(isRed){
+        cardElement.classList.add("red");
+    }
+
+    /* ======================================================
+       SYMBOLE CENTRAL
+    ====================================================== */
+
+    let centerContent = card.suit;
+    let centerClass = "card-center";
+
+    if(card.label === "J"){
+
+        centerClass += " figure";
+
+        centerContent = `
+            🤵
+            <small>${card.suit}</small>
+        `;
+
+    }else if(card.label === "Q"){
+
+        centerClass += " figure";
+
+        centerContent = `
+            👸
+            <small>${card.suit}</small>
+        `;
+
+    }else if(card.label === "K"){
+
+        centerClass += " figure";
+
+        centerContent = `
+            🤴
+            <small>${card.suit}</small>
+        `;
 
     }
 
-    div.textContent=`${card.label}${card.suit}`;
+    /* ======================================================
+       CONSTRUCTION DE LA CARTE
+    ====================================================== */
 
-    return div;
+    cardElement.innerHTML = `
+        <div class="card-corner top">
+            <span>${card.label}</span>
+            <span>${card.suit}</span>
+        </div>
+
+        <div class="${centerClass}">
+            ${centerContent}
+        </div>
+
+        <div class="card-corner bottom">
+            <span>${card.label}</span>
+            <span>${card.suit}</span>
+        </div>
+    `;
+
+    return cardElement;
 
 }
 
