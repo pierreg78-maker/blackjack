@@ -71,23 +71,201 @@ h1{
     min-height:120px;
 }
 
+/* ==========================================================
+   CARTES DE CASINO
+========================================================== */
+
 .card{
-    width:75px;
-    height:110px;
-    background:white;
-    border-radius:10px;
-    border:2px solid #222;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:28px;
+    position:relative;
+
+    width:78px;
+    height:112px;
+
+    flex-shrink:0;
+
+    background:
+        linear-gradient(
+            145deg,
+            #fffdf2 0%,
+            #f7f0d8 100%
+        );
+
+    border:2px solid #d6c69c;
+    border-radius:11px;
+
+    color:#171717;
+
+    box-shadow:
+        0 5px 9px rgba(0,0,0,.28),
+        inset 0 0 0 2px rgba(255,255,255,.75);
+
+    font-family:Georgia, "Times New Roman", serif;
     font-weight:bold;
-    color:black;
+
     user-select:none;
+    overflow:hidden;
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease;
+}
+
+.card:hover{
+    transform:translateY(-4px);
+
+    box-shadow:
+        0 9px 14px rgba(0,0,0,.35),
+        inset 0 0 0 2px rgba(255,255,255,.75);
 }
 
 .card.red{
-    color:#d50000;
+    color:#c5162e;
+}
+
+/* Valeurs dans les angles */
+
+.card-corner{
+    position:absolute;
+
+    display:flex;
+    flex-direction:column;
+
+    align-items:center;
+    justify-content:center;
+
+    line-height:.9;
+    font-size:17px;
+}
+
+.card-corner span:last-child{
+    font-size:16px;
+    margin-top:3px;
+}
+
+.card-corner.top{
+    top:7px;
+    left:7px;
+}
+
+.card-corner.bottom{
+    right:7px;
+    bottom:7px;
+
+    transform:rotate(180deg);
+}
+
+/* Symbole central */
+
+.card-center{
+    position:absolute;
+
+    top:50%;
+    left:50%;
+
+    transform:translate(-50%,-50%);
+
+    font-size:38px;
+    line-height:1;
+}
+
+/* Figures */
+
+.card-center.figure{
+    display:flex;
+    flex-direction:column;
+
+    align-items:center;
+    justify-content:center;
+
+    width:48px;
+    height:64px;
+
+    border:2px solid currentColor;
+    border-radius:8px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(212,175,55,.25),
+            rgba(255,255,255,.5)
+        );
+
+    font-size:29px;
+}
+
+.card-center.figure small{
+    margin-top:2px;
+    font-size:15px;
+}
+
+/* ==========================================================
+   DOS DE CARTE ATELIER MÉMO
+========================================================== */
+
+.card.card-hidden{
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:7px;
+
+    color:#f4d36c;
+
+    background:
+        repeating-linear-gradient(
+            45deg,
+            rgba(255,255,255,.035) 0,
+            rgba(255,255,255,.035) 5px,
+            transparent 5px,
+            transparent 10px
+        ),
+        linear-gradient(
+            145deg,
+            #07152f,
+            #102b58
+        );
+
+    border:3px solid #d4af37;
+
+    box-shadow:
+        0 5px 10px rgba(0,0,0,.4),
+        inset 0 0 0 2px #07152f,
+        inset 0 0 0 4px #e1c15f;
+}
+
+.card-back-inner{
+    width:100%;
+    height:100%;
+
+    display:flex;
+    flex-direction:column;
+
+    align-items:center;
+    justify-content:center;
+
+    border:1px solid rgba(244,211,108,.8);
+    border-radius:6px;
+
+    text-align:center;
+
+    font-family:Georgia, "Times New Roman", serif;
+}
+
+.card-back-star{
+    font-size:13px;
+    letter-spacing:2px;
+}
+
+.card-back-title{
+    margin:7px 0;
+
+    font-size:16px;
+    line-height:1.05;
+
+    text-shadow:
+        0 1px 0 #000,
+        0 0 5px rgba(244,211,108,.4);
 }
 
 .score{
@@ -158,11 +336,36 @@ button:disabled{
         font-size:1.5rem;
     }
 
-    .card{
-        width:60px;
-        height:90px;
-        font-size:22px;
-    }
+   .card{
+    width:64px;
+    height:94px;
+}
+
+.card-corner{
+    font-size:14px;
+}
+
+.card-corner span:last-child{
+    font-size:13px;
+}
+
+.card-center{
+    font-size:31px;
+}
+
+.card-center.figure{
+    width:40px;
+    height:52px;
+    font-size:23px;
+}
+
+.card-center.figure small{
+    font-size:12px;
+}
+
+.card-back-title{
+    font-size:13px;
+}
 
     button{
         width:100%;
