@@ -1,1 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Blackjack - Atelier Mémo</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div id="game">
+
+    <h1>🃏 Blackjack</h1>
+
+    <div class="topBar">
+
+        <div class="infoBox">
+            🪙 Pièces d'or :
+            <span id="gold">100</span>
+        </div>
+
+        <div class="infoBox">
+            Mise :
+            <span id="bet">10</span>
+        </div>
+
+    </div>
+
+    <!-- ==================== -->
+    <!-- CROUPIER -->
+    <!-- ==================== -->
+
+    <div class="zone">
+
+        <h2>Croupier</h2>
+
+        <div id="dealerCards" class="cards">
+
+        </div>
+
+        <div class="score">
+            Total :
+            <span id="dealerScore">0</span>
+        </div>
+
+    </div>
+
+    <!-- ==================== -->
+    <!-- JOUEUR -->
+    <!-- ==================== -->
+
+    <div class="zone">
+
+        <h2>Vous</h2>
+
+        <div id="playerCards" class="cards">
+
+        </div>
+
+        <div class="score">
+            Total :
+            <span id="playerScore">0</span>
+        </div>
+
+    </div>
+
+    <!-- ==================== -->
+
+    <div id="message" class="message">
+        Cliquez sur « Distribuer »
+    </div>
+
+    <!-- ==================== -->
+
+    <div class="buttons">
+
+        <button id="dealBtn">
+            Distribuer
+        </button>
+
+        <button id="hitBtn" disabled>
+            Tirer
+        </button>
+
+        <button id="standBtn" disabled>
+            Rester
+        </button>
+
+        <button id="newBtn">
+            Nouvelle partie
+        </button>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
