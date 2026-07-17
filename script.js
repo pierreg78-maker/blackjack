@@ -1,4 +1,4 @@
-```javascript
+
 "use strict";
 
 console.log("Le script Blackjack est bien chargé.");
