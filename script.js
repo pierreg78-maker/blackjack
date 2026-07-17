@@ -524,76 +524,98 @@ async function stand(){
    DÉTERMINATION DU GAGNANT
    ========================================================== */
 
-function determineWinner() {
-    const playerScore = calculateScore(playerHand);
-    const dealerScore = calculateScore(dealerHand);
 
-    if (dealerScore > 21) {
+function determineWinner(){
+
+    const playerScore=calculateScore(playerHand);
+    const dealerScore=calculateScore(dealerHand);
+
+    if(dealerScore>21){
+
         finishRound(
             "Le croupier dépasse 21. Vous gagnez !"
         );
         return;
+
     }
 
-    if (playerScore > dealerScore) {
+    if(playerScore>dealerScore){
+
         finishRound(
             "Votre main est la meilleure. Vous gagnez !"
         );
         return;
+
     }
 
-    if (playerScore < dealerScore) {
+    if(playerScore<dealerScore){
+
         finishRound(
             "Le croupier gagne cette partie."
         );
         return;
+
     }
 
     finishRound("Égalité !");
+
 }
 
 /* ==========================================================
    FIN DE PARTIE
-   ========================================================== */
+========================================================== */
 
-function finishRound(message) {
-    roundActive = false;
-    dealerCardHidden = false;
+function finishRound(message){
+
+    roundActive=false;
+    dealerCardHidden=false;
+    animationInProgress=false;
 
     renderGame();
-    disablePlayerButtons();
+
+    enableFinishedButtons();
+
     setMessage(message);
+
 }
 
 /* ==========================================================
    NOUVELLE PARTIE
-   ========================================================== */
+========================================================== */
 
-function resetTable() {
-    roundActive = false;
-    dealerCardHidden = true;
+function resetTable(){
 
-    deck = [];
-    playerHand = [];
-    dealerHand = [];
+    if(animationInProgress) return;
+
+    roundActive=false;
+    dealerCardHidden=true;
+
+    deck=[];
+    playerHand=[];
+    dealerHand=[];
 
     renderGame();
-    disablePlayerButtons();
+
+    dealButton.disabled=false;
+    hitButton.disabled=true;
+    standButton.disabled=true;
+    newButton.disabled=true;
 
     setMessage("Cliquez sur « Distribuer ».");
+
 }
 
 /* ==========================================================
    ÉVÉNEMENTS
-   ========================================================== */
+========================================================== */
 
-dealButton.addEventListener("click", startRound);
-hitButton.addEventListener("click", hit);
-standButton.addEventListener("click", stand);
-newButton.addEventListener("click", resetTable);
+dealButton.addEventListener("click",startRound);
+hitButton.addEventListener("click",hit);
+standButton.addEventListener("click",stand);
+newButton.addEventListener("click",resetTable);
 
 /* ==========================================================
    INITIALISATION
-   ========================================================== */
+========================================================== */
 
 resetTable();
