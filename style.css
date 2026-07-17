@@ -552,6 +552,71 @@ button:disabled{
     }
 }
 
+/* ==========================================================
+   CHOIX DE LA MISE
+========================================================== */
+
+.betBox{
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    padding:7px 10px;
+
+    border-radius:14px;
+
+    background:rgba(255,255,255,.12);
+}
+
+.betLabel{
+    font-weight:bold;
+    white-space:nowrap;
+}
+
+.betChoices{
+    display:flex;
+    gap:6px;
+}
+
+.betButton{
+    min-width:45px;
+
+    padding:8px 11px;
+
+    border:2px solid transparent;
+    border-radius:20px;
+
+    background:rgba(0,0,0,.25);
+    color:#fff;
+
+    font-size:.95rem;
+    font-weight:bold;
+}
+
+.betButton:hover{
+    transform:translateY(-1px);
+}
+
+.betButton.active{
+    border-color:#fff3a0;
+
+    background:
+        linear-gradient(
+            180deg,
+            #ffd84d,
+            #d99a00
+        );
+
+    color:#4d3000;
+
+    box-shadow:
+        0 0 10px rgba(255,215,0,.55);
+}
+
+.betButton:disabled{
+    opacity:.4;
+}
+
 @media(max-width:600px){
 
     .blackjack-banner{
