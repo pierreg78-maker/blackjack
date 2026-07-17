@@ -927,8 +927,8 @@ async function initializeGame() {
             "Aucun profil actif. Ouvrez d'abord la vitrine et choisissez un joueur."
         );
 
-        dealButton.disabled = true;
-        return;
+        dealButton.disabled = false;
+         return;
     }
 
     setMessage(
