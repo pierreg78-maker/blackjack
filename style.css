@@ -54,12 +54,12 @@ h1{
 }
 
 .zone{
-    margin-top:25px;
+    margin-top:16px;
 }
 
 .zone h2{
     text-align:center;
-    margin-bottom:10px;
+    margin-bottom:6px;
     color:#ffe082;
 }
 
@@ -67,8 +67,8 @@ h1{
     display:flex;
     flex-wrap:wrap;
     justify-content:center;
-    gap:12px;
-    min-height:120px;
+    gap:8px;
+    min-height:112px;
 }
 
 /* ==========================================================
@@ -270,30 +270,30 @@ h1{
 
 .score{
     text-align:center;
-    margin-top:10px;
+    margin-top:4px;
     font-size:1.2rem;
     font-weight:bold;
 }
 
 .message{
-    margin:25px 0;
+    margin:12px 0;
     text-align:center;
-    font-size:1.4rem;
+    font-size:1.2rem;
     color:#ffe082;
-    min-height:35px;
+    min-height:24px;
 }
 
 .buttons{
     display:flex;
     justify-content:center;
     flex-wrap:wrap;
-    gap:12px;
+    gap:8px;
 }
 
 button{
     border:none;
     border-radius:30px;
-    padding:14px 22px;
+    padding:11px 18px;
     cursor:pointer;
     font-size:1rem;
     font-weight:bold;
@@ -332,43 +332,83 @@ button:disabled{
 
 @media(max-width:600px){
 
-    h1{
-        font-size:1.5rem;
+    #game{
+        padding:12px;
     }
 
-   .card{
-    width:64px;
-    height:94px;
-}
+    h1{
+        font-size:1.45rem;
+        margin-bottom:10px;
+    }
 
-.card-corner{
-    font-size:14px;
-}
+    .topBar{
+        margin-bottom:10px;
+    }
 
-.card-corner span:last-child{
-    font-size:13px;
-}
+    .infoBox{
+        padding:8px 12px;
+        font-size:.92rem;
+    }
 
-.card-center{
-    font-size:31px;
-}
+    .zone{
+        margin-top:10px;
+    }
 
-.card-center.figure{
-    width:40px;
-    height:52px;
-    font-size:23px;
-}
+    .zone h2{
+        margin-bottom:4px;
+        font-size:1.55rem;
+    }
 
-.card-center.figure small{
-    font-size:12px;
-}
+    .cards{
+        gap:6px;
+        min-height:95px;
+    }
 
-.card-back-title{
-    font-size:13px;
-}
+    .card{
+        width:64px;
+        height:94px;
+    }
+
+    .card-corner{
+        font-size:14px;
+    }
+
+    .card-corner span:last-child{
+        font-size:13px;
+    }
+
+    .card-center{
+        font-size:30px;
+    }
+
+    .card-center.figure{
+        width:38px;
+        height:50px;
+        font-size:22px;
+    }
+
+    .card-center.figure small{
+        font-size:11px;
+    }
+
+    .card-back-title{
+        font-size:13px;
+    }
+
+    .score{
+        margin-top:2px;
+        font-size:1rem;
+    }
+
+    .message{
+        margin:8px 0;
+        min-height:22px;
+        font-size:1rem;
+    }
 
     button{
-        width:100%;
+        padding:10px 14px;
+        font-size:.9rem;
     }
 
 }
