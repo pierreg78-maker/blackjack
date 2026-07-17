@@ -131,32 +131,52 @@ function updateBalanceDisplay() {
    ========================================================== */
 
 function loadLocalProfile() {
-    const savedProfile = localStorage.getItem(CLE_PROFIL_ACTIF);
+    const possibleKeys = [
+        "vitrineProfilActif",
+        "profilActif",
+        "profilSelectionne",
+        "atelierMemoProfil"
+    ];
+
+    let savedProfile = null;
+
+    for (const key of possibleKeys) {
+        const value = localStorage.getItem(key);
+
+        if (value) {
+            savedProfile = value;
+            console.log("Profil trouvé avec la clé :", key);
+            break;
+        }
+    }
 
     if (!savedProfile) {
         activeProfile = null;
+        console.warn("Aucun profil actif trouvé dans le localStorage.");
         return false;
     }
 
     try {
         activeProfile = JSON.parse(savedProfile);
     } catch (error) {
-        console.error("Profil local illisible :", error);
+        console.error("Le profil actif est illisible :", error);
         activeProfile = null;
         return false;
     }
 
     const localBalance = Number(
         activeProfile.solde ??
+        activeProfile.piecesOr ??
         activeProfile.pieces ??
-        activeProfile.gold
+        activeProfile.gold ??
+        0
     );
 
-    if (Number.isFinite(localBalance)) {
-        goldBalance = localBalance;
-    }
+    goldBalance = Number.isFinite(localBalance)
+        ? localBalance
+        : 0;
 
-    return Boolean(getProfileId(activeProfile));
+    return true;
 }
 
 function saveLocalProfile() {
