@@ -1,13 +1,14 @@
 /* ==========================================================
    BLACKJACK - ATELIER MÉMO
-   ÉTAPE 1 : moteur du jeu
-   ========================================================== */
+   VERSION 1.1
+   Distribution animée
+========================================================== */
 
 "use strict";
 
 /* ==========================================================
    ÉLÉMENTS HTML
-   ========================================================== */
+========================================================== */
 
 const dealerCardsElement = document.getElementById("dealerCards");
 const playerCardsElement = document.getElementById("playerCards");
@@ -23,8 +24,21 @@ const standButton = document.getElementById("standBtn");
 const newButton = document.getElementById("newBtn");
 
 /* ==========================================================
+   ANIMATION
+========================================================== */
+
+const DEAL_DELAY = 250;
+const CARD_ANIMATION_DURATION = 280;
+
+let animationInProgress = false;
+
+function wait(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/* ==========================================================
    ÉTAT DU JEU
-   ========================================================== */
+========================================================== */
 
 let deck = [];
 let playerHand = [];
@@ -34,202 +48,270 @@ let roundActive = false;
 let dealerCardHidden = true;
 
 /* ==========================================================
-   CRÉATION DU PAQUET
-   ========================================================== */
+   PAQUET
+========================================================== */
 
 function createDeck() {
-    const suits = ["♠", "♥", "♦", "♣"];
+
+    const suits = ["♠","♥","♦","♣"];
 
     const ranks = [
-        { label: "A", value: 11 },
-        { label: "2", value: 2 },
-        { label: "3", value: 3 },
-        { label: "4", value: 4 },
-        { label: "5", value: 5 },
-        { label: "6", value: 6 },
-        { label: "7", value: 7 },
-        { label: "8", value: 8 },
-        { label: "9", value: 9 },
-        { label: "10", value: 10 },
-        { label: "J", value: 10 },
-        { label: "Q", value: 10 },
-        { label: "K", value: 10 }
+        {label:"A",value:11},
+        {label:"2",value:2},
+        {label:"3",value:3},
+        {label:"4",value:4},
+        {label:"5",value:5},
+        {label:"6",value:6},
+        {label:"7",value:7},
+        {label:"8",value:8},
+        {label:"9",value:9},
+        {label:"10",value:10},
+        {label:"J",value:10},
+        {label:"Q",value:10},
+        {label:"K",value:10}
     ];
 
-    const newDeck = [];
+    const cards=[];
 
-    for (const suit of suits) {
-        for (const rank of ranks) {
-            newDeck.push({
-                suit: suit,
-                label: rank.label,
-                value: rank.value
+    suits.forEach(suit=>{
+        ranks.forEach(rank=>{
+            cards.push({
+                suit:suit,
+                label:rank.label,
+                value:rank.value
             });
-        }
-    }
+        });
+    });
 
-    return newDeck;
+    return cards;
+
 }
 
-/* ==========================================================
-   MÉLANGE DES CARTES
-   ========================================================== */
+function shuffleDeck(cards){
 
-function shuffleDeck(cards) {
-    for (let index = cards.length - 1; index > 0; index--) {
-        const randomIndex = Math.floor(
-            Math.random() * (index + 1)
-        );
+    for(let i=cards.length-1;i>0;i--){
 
-        const temporaryCard = cards[index];
-        cards[index] = cards[randomIndex];
-        cards[randomIndex] = temporaryCard;
+        const j=Math.floor(Math.random()*(i+1));
+
+        [cards[i],cards[j]]=[cards[j],cards[i]];
+
     }
 
     return cards;
+
 }
 
-/* ==========================================================
-   TIRAGE D’UNE CARTE
-   ========================================================== */
+function drawCard(){
 
-function drawCard() {
-    if (deck.length === 0) {
-        deck = shuffleDeck(createDeck());
+    if(deck.length===0){
+
+        deck=shuffleDeck(createDeck());
+
     }
 
     return deck.pop();
+
 }
 
 /* ==========================================================
-   CALCUL DU TOTAL D’UNE MAIN
-   ========================================================== */
+   SCORE
+========================================================== */
 
-function calculateScore(hand) {
-    let score = 0;
-    let aceCount = 0;
+function calculateScore(hand){
 
-    for (const card of hand) {
-        score += card.value;
+    let score=0;
+    let aces=0;
 
-        if (card.label === "A") {
-            aceCount++;
-        }
-    }
+    hand.forEach(card=>{
 
-    /*
-     * Chaque as vaut d’abord 11.
-     * Si le total dépasse 21, un as passe automatiquement à 1.
-     */
+        score+=card.value;
 
-    while (score > 21 && aceCount > 0) {
-        score -= 10;
-        aceCount--;
+        if(card.label==="A") aces++;
+
+    });
+
+    while(score>21 && aces>0){
+
+        score-=10;
+        aces--;
+
     }
 
     return score;
+
+}
+
+function isBlackjack(hand){
+
+    return hand.length===2 && calculateScore(hand)===21;
+
 }
 
 /* ==========================================================
-   DÉTECTION DU BLACKJACK NATUREL
-   ========================================================== */
+   CARTES
+========================================================== */
 
-function isBlackjack(hand) {
-    return hand.length === 2 && calculateScore(hand) === 21;
+function createCardElement(card,hidden=false){
+
+    const div=document.createElement("div");
+
+    div.className="card";
+
+    if(hidden){
+
+        div.classList.add("card-hidden");
+        div.dataset.hidden="true";
+        div.textContent="🂠";
+
+        return div;
+
+    }
+
+    div.dataset.hidden="false";
+
+    if(card.suit==="♥" || card.suit==="♦"){
+
+        div.classList.add("red");
+
+    }
+
+    div.textContent=`${card.label}${card.suit}`;
+
+    return div;
+
 }
 
-/* ==========================================================
-   CRÉATION VISUELLE D’UNE CARTE
-   ========================================================== */
+function animateCardArrival(card){
 
-function createCardElement(card, hidden = false) {
-    const cardElement = document.createElement("div");
-    cardElement.className = "card";
+    if(!card.animate) return;
 
-    if (hidden) {
-        cardElement.textContent = "🂠";
-        return cardElement;
-    }
+    card.animate(
+        [
+            {
+                opacity:0,
+                transform:"translateY(-30px) scale(.85)"
+            },
+            {
+                opacity:1,
+                transform:"translateY(0) scale(1)"
+            }
+        ],
+        {
+            duration:CARD_ANIMATION_DURATION,
+            easing:"ease-out"
+        }
+    );
 
-    if (card.suit === "♥" || card.suit === "♦") {
-        cardElement.classList.add("red");
-    }
-
-    cardElement.textContent = `${card.label}${card.suit}`;
-
-    return cardElement;
 }
 
-/* ==========================================================
-   AFFICHAGE DE LA TABLE
-   ========================================================== */
+function updateScores(){
 
-function renderGame() {
-    dealerCardsElement.innerHTML = "";
-    playerCardsElement.innerHTML = "";
+    playerScoreElement.textContent=
+        playerHand.length
+            ?calculateScore(playerHand)
+            :"0";
 
-    dealerHand.forEach(function (card, index) {
-        const hidden =
-            dealerCardHidden &&
-            index === 1;
+    if(dealerHand.length===0){
 
-        const cardElement =
-            createCardElement(card, hidden);
+        dealerScoreElement.textContent="0";
+        return;
 
-        dealerCardsElement.appendChild(cardElement);
-    });
-
-    playerHand.forEach(function (card) {
-        const cardElement =
-            createCardElement(card);
-
-        playerCardsElement.appendChild(cardElement);
-    });
-
-    if (playerHand.length === 0) {
-        playerScoreElement.textContent = "0";
-    } else {
-        playerScoreElement.textContent =
-            calculateScore(playerHand);
     }
 
-    if (dealerHand.length === 0) {
-        dealerScoreElement.textContent = "0";
-    } else if (dealerCardHidden) {
-        dealerScoreElement.textContent =
+    if(dealerCardHidden){
+
+        dealerScoreElement.textContent=
             calculateScore([dealerHand[0]]);
-    } else {
-        dealerScoreElement.textContent =
+
+    }else{
+
+        dealerScoreElement.textContent=
             calculateScore(dealerHand);
+
     }
+
+}
+
+function appendAnimatedCard(container,card,hidden=false){
+
+    const element=createCardElement(card,hidden);
+
+    container.appendChild(element);
+
+    animateCardArrival(element);
+
+    updateScores();
+
+}
+
+function renderGame(){
+
+    dealerCardsElement.innerHTML="";
+    playerCardsElement.innerHTML="";
+
+    dealerHand.forEach((card,index)=>{
+
+        dealerCardsElement.appendChild(
+            createCardElement(
+                card,
+                dealerCardHidden && index===1
+            )
+        );
+
+    });
+
+    playerHand.forEach(card=>{
+
+        playerCardsElement.appendChild(
+            createCardElement(card)
+        );
+
+    });
+
+    updateScores();
+
 }
 
 /* ==========================================================
-   MESSAGE
-   ========================================================== */
+   MESSAGES
+========================================================== */
 
-function setMessage(text) {
-    messageElement.textContent = text;
+function setMessage(text){
+
+    messageElement.textContent=text;
+
 }
 
 /* ==========================================================
-   GESTION DES BOUTONS
-   ========================================================== */
+   BOUTONS
+========================================================== */
 
-function enablePlayerButtons() {
-    dealButton.disabled = true;
-    hitButton.disabled = false;
-    standButton.disabled = false;
-    newButton.disabled = true;
+function lockButtons(){
+
+    dealButton.disabled=true;
+    hitButton.disabled=true;
+    standButton.disabled=true;
+    newButton.disabled=true;
+
 }
 
-function disablePlayerButtons() {
-    dealButton.disabled = false;
-    hitButton.disabled = true;
-    standButton.disabled = true;
-    newButton.disabled = false;
+function enablePlayerButtons(){
+
+    dealButton.disabled=true;
+    hitButton.disabled=false;
+    standButton.disabled=false;
+    newButton.disabled=true;
+
 }
 
+function enableFinishedButtons(){
+
+    hitButton.disabled=true;
+    standButton.disabled=true;
+    dealButton.disabled=true;
+    newButton.disabled=false;
+
+}
 /* ==========================================================
    DÉBUT D’UNE PARTIE
    ========================================================== */
