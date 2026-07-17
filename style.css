@@ -361,6 +361,152 @@ button:disabled{
     transform:none;
 }
 
+/* ==========================================================
+   SABOT DE CARTES
+========================================================== */
+
+#game{
+    position:relative;
+}
+
+.shoe{
+
+    position:absolute;
+
+    top:18px;
+    left:18px;
+
+    width:90px;
+    height:78px;
+
+    pointer-events:none;
+
+    z-index:50;
+}
+
+.shoe-cards{
+
+    position:absolute;
+
+    top:4px;
+    left:10px;
+
+    width:56px;
+    height:52px;
+}
+
+.shoe-cards span{
+
+    position:absolute;
+
+    width:42px;
+    height:58px;
+
+    border-radius:7px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #ececec
+        );
+
+    border:2px solid #d4af37;
+
+    box-shadow:
+        0 2px 5px rgba(0,0,0,.25);
+}
+
+.shoe-cards span:nth-child(1){
+    left:0;
+    top:0;
+}
+
+.shoe-cards span:nth-child(2){
+    left:4px;
+    top:3px;
+}
+
+.shoe-cards span:nth-child(3){
+    left:8px;
+    top:6px;
+}
+
+.shoe-cards span:nth-child(4){
+    left:12px;
+    top:9px;
+}
+
+.shoe-front{
+
+    position:absolute;
+
+    bottom:0;
+    left:0;
+
+    width:82px;
+    height:42px;
+
+    border-radius:10px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #8b5a2b,
+            #5b3413
+        );
+
+    border:2px solid #d4af37;
+
+    box-shadow:
+        0 4px 10px rgba(0,0,0,.35);
+}
+
+.shoe-slot{
+
+    position:absolute;
+
+    top:5px;
+    left:9px;
+
+    width:58px;
+    height:7px;
+
+    border-radius:10px;
+
+    background:#2c1707;
+}
+
+.shoe-title{
+
+    position:absolute;
+
+    bottom:6px;
+    width:100%;
+
+    text-align:center;
+
+    font-size:10px;
+    font-weight:bold;
+
+    color:#ffe082;
+}
+
+@keyframes shoeBounce{
+
+    0%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-2px);
+    }
+
+    100%{
+        transform:translateY(0);
+    }
+}
+
 @media(max-width:600px){
 
     #game{
