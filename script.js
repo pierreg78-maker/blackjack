@@ -23,10 +23,25 @@ const hitButton = document.getElementById("hitBtn");
 const standButton = document.getElementById("standBtn");
 const newButton = document.getElementById("newBtn");
 const goldElement = document.getElementById("gold");
+const playerNameElement = document.getElementById("playerName");
+const syncStatusElement = document.getElementById("syncStatus");
 
 const betButtons = document.querySelectorAll(
     ".betButton"
 );
+
+/* =========================
+   PROFIL ET API ATELIER MÉMO
+========================= */
+
+const API_URL =
+    "https://script.google.com/macros/s/AKfycbyh1LbQNETMy0GS7A5SzACTPMYlFEal9W3-XZozkwzIkAAUhlo_InN-5FOrI9eEqPoEeA/exec";
+
+const PROFILE_KEY = "vitrineProfilActif";
+
+let activeProfile = null;
+let profileReady = false;
+let syncInProgress = false;
 
 /* =========================
    RÉGLAGES D'ANIMATION
@@ -48,7 +63,7 @@ let dealerHand = [];
 
 let roundActive = false;
 let dealerCardHidden = true;
-let gold = 100;
+let gold = 0;
 let selectedBet = 10;
 let currentBet = 0;
 
@@ -58,6 +73,198 @@ let currentBet = 0;
 
 function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function readLocalProfile() {
+    try {
+        return JSON.parse(
+            localStorage.getItem(PROFILE_KEY) || "null"
+        );
+    } catch (error) {
+        localStorage.removeItem(PROFILE_KEY);
+        return null;
+    }
+}
+
+function saveLocalProfile(profile) {
+    activeProfile = {
+        id: profile.id,
+        prenom: profile.prenom,
+        piecesOr: Math.trunc(
+            Number(profile.piecesOr ?? profile.solde) || 0
+        ),
+        derniereMiseAJour: new Date().toISOString()
+    };
+
+    localStorage.setItem(
+        PROFILE_KEY,
+        JSON.stringify(activeProfile)
+    );
+}
+
+function setSyncStatus(text = "", type = "") {
+    syncStatusElement.textContent = text;
+    syncStatusElement.className =
+        "syncStatus" + (type ? " " + type : "");
+}
+
+async function apiGet(action, parameters = {}) {
+    const url = new URL(API_URL);
+    url.searchParams.set("action", action);
+
+    Object.entries(parameters).forEach(([key, value]) => {
+        url.searchParams.set(key, value);
+    });
+
+    const response = await fetch(url, {
+        method: "GET",
+        cache: "no-store"
+    });
+
+    if (!response.ok) {
+        throw new Error("Le serveur ne répond pas.");
+    }
+
+    return response.json();
+}
+
+async function apiPost(data) {
+    const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify(data)
+    });
+
+    if (!response.ok) {
+        throw new Error("Le serveur ne répond pas.");
+    }
+
+    return response.json();
+}
+
+function applyProfile(profile) {
+    saveLocalProfile(profile);
+
+    gold = activeProfile.piecesOr;
+    playerNameElement.textContent = activeProfile.prenom;
+    profileReady = true;
+
+    document.body.classList.remove("profile-missing");
+
+    updateGoldDisplay();
+    updateBetButtons();
+}
+
+async function loadActiveProfile() {
+    const localProfile = readLocalProfile();
+
+    if (!localProfile || !localProfile.id) {
+        profileReady = false;
+        document.body.classList.add("profile-missing");
+        playerNameElement.textContent = "Aucun joueur";
+        goldElement.textContent = "—";
+        setMessage(
+            "Choisissez d’abord un profil dans la Vitrine enchantée."
+        );
+        setSyncStatus(
+            "Le Blackjack utilise le même profil que les autres jeux.",
+            "error"
+        );
+        lockButtons();
+        return;
+    }
+
+    playerNameElement.textContent =
+        localProfile.prenom || "Joueur";
+
+    setSyncStatus("Synchronisation du solde…");
+
+    try {
+        const result = await apiGet(
+            "obtenirProfil",
+            { id: localProfile.id }
+        );
+
+        if (!result.ok || !result.profil) {
+            throw new Error(
+                result.erreur || "Profil introuvable."
+            );
+        }
+
+        applyProfile(result.profil);
+        resetTable();
+        setSyncStatus("Solde synchronisé.", "success");
+
+        window.setTimeout(() => {
+            setSyncStatus("");
+        }, 1800);
+
+    } catch (error) {
+        profileReady = false;
+        document.body.classList.add("profile-missing");
+        goldElement.textContent = "—";
+        lockButtons();
+        setMessage(
+            "Impossible de charger le profil pour le moment."
+        );
+        setSyncStatus(
+            error.message || "Erreur de connexion.",
+            "error"
+        );
+    }
+}
+
+async function registerMovement(amount, operation) {
+    if (!activeProfile || !activeProfile.id) {
+        throw new Error("Aucun profil sélectionné.");
+    }
+
+    syncInProgress = true;
+    setSyncStatus("Enregistrement des pièces d’or…");
+
+    try {
+        const result = await apiPost({
+            action: "mouvement",
+            profilId: activeProfile.id,
+            montant: amount,
+            operation: operation
+        });
+
+        if (!result.ok) {
+            throw new Error(
+                result.erreur || "Mouvement refusé."
+            );
+        }
+
+        if (result.profil) {
+            applyProfile(result.profil);
+        } else {
+            gold = Math.trunc(
+                Number(result.solde) || gold + amount
+            );
+            activeProfile.piecesOr = gold;
+            localStorage.setItem(
+                PROFILE_KEY,
+                JSON.stringify(activeProfile)
+            );
+            updateGoldDisplay();
+        }
+
+        setSyncStatus("Pièces d’or enregistrées.", "success");
+
+        window.setTimeout(() => {
+            if (!syncInProgress) {
+                setSyncStatus("");
+            }
+        }, 1600);
+
+        return true;
+
+    } finally {
+        syncInProgress = false;
+    }
 }
 
 /* =========================
@@ -460,8 +667,10 @@ function updateBetButtons() {
         );
 
         button.disabled =
+            !profileReady ||
             roundActive ||
             animationInProgress ||
+            syncInProgress ||
             value > gold;
     });
 }
@@ -492,54 +701,107 @@ function selectBet(event) {
     );
 }
 
-function placeBet() {
+async function placeBet() {
+    if (!profileReady || !activeProfile) {
+        setMessage(
+            "Choisissez d’abord un profil dans la Vitrine enchantée."
+        );
+        return false;
+    }
+
     if (selectedBet > gold) {
         setMessage(
             "Vous n'avez pas assez de pièces d'or."
         );
-
         return false;
     }
 
     currentBet = selectedBet;
-    gold -= currentBet;
-
-    updateGoldDisplay();
+    lockButtons();
     updateBetButtons();
 
-    return true;
+    try {
+        await registerMovement(
+            -currentBet,
+            `Blackjack : mise de ${currentBet} pièces`
+        );
+
+        return true;
+
+    } catch (error) {
+        currentBet = 0;
+        setMessage(
+            error.message || "La mise n’a pas pu être enregistrée."
+        );
+        setSyncStatus(
+            "Mise non débitée.",
+            "error"
+        );
+        dealButton.disabled = !profileReady;
+        hitButton.disabled = true;
+        standButton.disabled = true;
+        newButton.disabled = true;
+        updateBetButtons();
+        return false;
+    }
 }
 
-function payWin() {
-    gold += currentBet * 2;
-}
-
-function payDraw() {
-    gold += currentBet;
-}
-
-function payBlackjack() {
-    gold += currentBet +
-        (currentBet * 1.5);
-}
-
-function finishPayment(result) {
+function getPayout(result) {
     if (result === "win") {
-        payWin();
+        return currentBet * 2;
     }
 
     if (result === "draw") {
-        payDraw();
+        return currentBet;
     }
 
     if (result === "blackjack") {
-        payBlackjack();
+        return currentBet + (currentBet * 1.5);
     }
+
+    return 0;
+}
+
+async function finishPayment(result) {
+    const payout = getPayout(result);
+    const settledBet = currentBet;
 
     currentBet = 0;
 
-    updateGoldDisplay();
-    updateBetButtons();
+    if (payout <= 0) {
+        updateGoldDisplay();
+        updateBetButtons();
+        return true;
+    }
+
+    const labels = {
+        win: "victoire",
+        draw: "égalité",
+        blackjack: "blackjack naturel"
+    };
+
+    try {
+        await registerMovement(
+            payout,
+            `Blackjack : ${labels[result]} (+${payout} pièces)`
+        );
+
+        return true;
+
+    } catch (error) {
+        setSyncStatus(
+            `Gain de ${payout} pièces à vérifier : ` +
+            (error.message || "erreur de connexion"),
+            "error"
+        );
+
+        console.error(
+            "Paiement Blackjack non synchronisé",
+            { result, payout, settledBet, error }
+        );
+
+        return false;
+    }
 }
 
 /* =========================
@@ -605,12 +867,13 @@ async function startRound() {
     if (roundActive || animationInProgress) {
         return;
     }
-if (!placeBet()) {
-    return;
-}
     animationInProgress = true;
-
     lockButtons();
+
+    if (!await placeBet()) {
+        animationInProgress = false;
+        return;
+    }
 
     deck = shuffleDeck(createDeck());
 
@@ -901,16 +1164,20 @@ function determineWinner() {
    FIN DE PARTIE
 ========================= */
 
-function finishRound(message, result) {
+async function finishRound(message, result) {
     roundActive = false;
     dealerCardHidden = false;
-    animationInProgress = false;
+    animationInProgress = true;
 
-    finishPayment(result);
-
+    lockButtons();
     updateScores();
-    enableFinishedButtons();
     setMessage(message);
+
+    await finishPayment(result);
+
+    animationInProgress = false;
+    enableFinishedButtons();
+    updateBetButtons();
 }
 
 /* =========================
@@ -935,7 +1202,7 @@ function resetTable() {
 
     renderGame();
 
-    dealButton.disabled = false;
+    dealButton.disabled = !profileReady;
 
     hitButton.disabled = true;
 
@@ -982,4 +1249,4 @@ betButtons.forEach(button => {
         selectBet
     );
 });
-resetTable();
+loadActiveProfile();
