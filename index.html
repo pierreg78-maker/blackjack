@@ -7,7 +7,7 @@
 
 <title>Blackjack - Atelier Mémo</title>
 
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="./style.css">
 
 </head>
 
@@ -15,13 +15,25 @@
 
 <div id="game">
 
+    <a class="villageButton"
+       href="https://pierreg78-maker.github.io/village/"
+       aria-label="Retour au village">
+        ←<span>Retour au<br>village</span>
+    </a>
+
        <h1>🃏 Blackjack</h1>
 
     <div class="topBar">
 
-        <div class="infoBox">
-            🪙 Pièces d'or :
-            <span id="gold">100</span>
+        <div class="playerInfo">
+            <div class="playerName">
+                👤 <span id="playerName">Profil non sélectionné</span>
+            </div>
+
+            <div class="infoBox">
+                🪙 Pièces d'or :
+                <span id="gold">—</span>
+            </div>
         </div>
 
         <div class="betBox">
@@ -76,8 +88,10 @@
 
     <!-- ==================== -->
 
-    <div id="message" class="message">
-        Cliquez sur « Distribuer »
+    <div id="syncStatus" class="syncStatus" aria-live="polite"></div>
+
+    <div id="message" class="message" aria-live="polite">
+        Chargement du profil…
     </div>
 
     <!-- ==================== -->
