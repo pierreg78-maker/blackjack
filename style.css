@@ -314,14 +314,14 @@ order:2;
     min-height:24px;
 }
 
-.buttons{
+.s{
     display:flex;
     justify-content:center;
     flex-wrap:wrap;
     gap:8px;
 }
 
-button{
+{
     border:none;
     border-radius:30px;
     padding:11px 18px;
@@ -331,7 +331,7 @@ button{
     transition:.2s;
 }
 
-button:hover{
+:hover{
     transform:scale(1.05);
 }
 
@@ -355,7 +355,7 @@ button:hover{
     color:white;
 }
 
-button:disabled{
+:disabled{
     opacity:.45;
     cursor:not-allowed;
     transform:none;
@@ -578,7 +578,7 @@ button:disabled{
     gap:6px;
 }
 
-.betButton{
+.bet{
     min-width:45px;
 
     padding:8px 11px;
@@ -593,11 +593,11 @@ button:disabled{
     font-weight:bold;
 }
 
-.betButton:hover{
+.bet:hover{
     transform:translateY(-1px);
 }
 
-.betButton.active{
+.bet.active{
     border-color:#fff3a0;
 
     background:
@@ -613,7 +613,7 @@ button:disabled{
         0 0 10px rgba(255,215,0,.55);
 }
 
-.betButton:disabled{
+.bet:disabled{
     opacity:.4;
 }
 
@@ -639,7 +639,7 @@ button:disabled{
         justify-content:center;
     }
 
-    .betButton{
+    .bet{
         min-width:42px;
         padding:7px 10px;
     }
@@ -686,7 +686,7 @@ box-shadow:
     inset 0 1px 1px rgba(255,255,255,.18);
    
 
-    background:linear-gradient(145deg,#2f8ce5,#1266b7);
+    background:linear-gradient(145deg,#3b8fe0,#1f6fc2);
     color:#fff;
 
     font-size:1.25rem;
