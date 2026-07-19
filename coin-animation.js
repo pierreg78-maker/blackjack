@@ -35,9 +35,11 @@
     function coinCountForBet(amount) {
         const value = Number(amount) || 10;
 
-        if (value >= 50) return 10;
-        if (value >= 20) return 4;
-        return 2;
+        // La mise représente 10 pièces d’or par pièce affichée :
+        // 10 → 1 pièce, 20 → 2 pièces, 50 → 5 pièces.
+        if (value >= 50) return 5;
+        if (value >= 20) return 2;
+        return 1;
     }
 
     function clearClasses() {
