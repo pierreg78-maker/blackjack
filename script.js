@@ -787,7 +787,7 @@ async function finishPayment(result) {
         );
 
         if (window.AtelierMemoCoins?.showWin) {
-            await window.AtelierMemoCoins.showWin(settledBet);
+            await window.AtelierMemoCoins.showWin(payout);
         }
 
         return true;
