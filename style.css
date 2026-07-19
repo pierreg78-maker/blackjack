@@ -903,3 +903,213 @@ body.profile-missing .buttons{
         font-size:.9rem;
     }
 }
+
+
+/* ==========================================================
+   ANIMATION DE LA MISE
+========================================================== */
+
+.betStage{
+    position:absolute;
+    z-index:15;
+
+    top:46%;
+    left:50%;
+
+    width:150px;
+    height:105px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-end;
+
+    pointer-events:none;
+    opacity:0;
+    visibility:hidden;
+
+    transform:translate(-50%,-50%) scale(.92);
+    transition:opacity .18s ease, transform .18s ease;
+}
+
+.betStage.visible{
+    opacity:1;
+    visibility:visible;
+    transform:translate(-50%,-50%) scale(1);
+}
+
+.betPot{
+    position:relative;
+    width:92px;
+    height:72px;
+    perspective:700px;
+}
+
+.betCoin{
+    --coin-index:0;
+
+    position:absolute;
+    left:50%;
+    bottom:calc(var(--coin-index) * 5px);
+
+    width:58px;
+    height:58px;
+
+    opacity:0;
+    transform:translate(-50%,-145px) scale(.58) rotate(-18deg);
+
+    animation:betCoinArrival 720ms
+        cubic-bezier(.18,.82,.28,1.22)
+        forwards;
+
+    filter:drop-shadow(0 6px 5px rgba(0,0,0,.4));
+}
+
+.betCoinSpinner{
+    position:relative;
+    width:100%;
+    height:100%;
+
+    transform-style:preserve-3d;
+    animation:betCoinSpin 620ms linear infinite;
+}
+
+.betCoinFace{
+    position:absolute;
+    inset:0;
+
+    width:100%;
+    height:100%;
+    object-fit:contain;
+
+    border-radius:50%;
+    backface-visibility:hidden;
+    user-select:none;
+}
+
+.betCoinRevers{
+    transform:rotateY(180deg);
+}
+
+.betStage.visible .betPot{
+    animation:betPotPulse 850ms ease-in-out infinite alternate;
+}
+
+.betStage.success .betCoin{
+    animation:betCoinAccepted 420ms ease-in forwards;
+}
+
+.betStage.error .betCoin{
+    animation:betCoinRejected 580ms ease-out forwards;
+}
+
+.betStageLabel{
+    margin-top:3px;
+
+    color:#ffe59a;
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:.84rem;
+    font-weight:bold;
+    letter-spacing:.25px;
+
+    text-shadow:0 2px 3px rgba(0,0,0,.75);
+}
+
+.betStage.success .betStageLabel{
+    opacity:0;
+}
+
+.betStage.error .betStageLabel{
+    color:#ffd0d0;
+}
+
+@keyframes betCoinArrival{
+    0%{
+        opacity:0;
+        transform:translate(-50%,-145px) scale(.58) rotate(-18deg);
+    }
+
+    70%{
+        opacity:1;
+        transform:translate(-50%,6px) scale(1.08) rotate(3deg);
+    }
+
+    86%{
+        transform:translate(-50%,-5px) scale(.98) rotate(-1deg);
+    }
+
+    100%{
+        opacity:1;
+        transform:translate(-50%,0) scale(1) rotate(0deg);
+    }
+}
+
+@keyframes betCoinSpin{
+    from{ transform:rotateY(0deg); }
+    to{ transform:rotateY(360deg); }
+}
+
+@keyframes betPotPulse{
+    from{ transform:translateY(0); }
+    to{ transform:translateY(-2px); }
+}
+
+@keyframes betCoinAccepted{
+    0%{
+        opacity:1;
+        transform:translate(-50%,0) scale(1);
+    }
+
+    100%{
+        opacity:0;
+        transform:translate(-50%,-36px) scale(.58) rotate(10deg);
+    }
+}
+
+@keyframes betCoinRejected{
+    0%{
+        opacity:1;
+        transform:translate(-50%,0) scale(1);
+    }
+
+    40%{
+        transform:translate(-50%,-18px) scale(1.04) rotate(-8deg);
+    }
+
+    100%{
+        opacity:0;
+        transform:translate(-135px,-100px) scale(.68) rotate(-35deg);
+    }
+}
+
+@media(max-width:600px){
+    .betStage{
+        top:47%;
+        width:115px;
+        height:88px;
+    }
+
+    .betPot{
+        width:74px;
+        height:58px;
+    }
+
+    .betCoin{
+        width:46px;
+        height:46px;
+        bottom:calc(var(--coin-index) * 4px);
+    }
+
+    .betStageLabel{
+        font-size:.72rem;
+    }
+}
+
+@media(prefers-reduced-motion:reduce){
+    .betCoin,
+    .betCoinSpinner,
+    .betStage.visible .betPot{
+        animation-duration:.01ms;
+        animation-iteration-count:1;
+    }
+}
