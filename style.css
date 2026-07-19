@@ -11,7 +11,11 @@
 
 body{
     font-family:Arial, Helvetica, sans-serif;
-    background:#0b5d1e;
+   background:
+radial-gradient(circle at center,
+#155f27 0%,
+#0d4d1e 45%,
+#083716 100%);
     color:#fff;
     min-height:100vh;
     display:flex;
@@ -23,9 +27,35 @@ body{
 #game{
     width:100%;
     max-width:900px;
-    background:#146b2d;
+    background:
+
+radial-gradient(circle at 50% 45%,
+rgba(255,255,255,.05),
+transparent 60%),
+
+repeating-radial-gradient(
+circle,
+rgba(255,255,255,.015) 0px,
+rgba(255,255,255,.015) 2px,
+transparent 3px,
+transparent 8px
+),
+
+linear-gradient(
+180deg,
+#14692d,
+#0f5824
+);
     border-radius:18px;
-    border:4px solid #d4af37;
+   border:10px solid #4b2d12;
+
+box-shadow:
+
+0 0 0 2px #d7b34d,
+
+0 0 0 6px #2a1608,
+
+0 18px 40px rgba(0,0,0,.45);
     padding:20px;
     box-shadow:0 0 20px rgba(0,0,0,.35);
 }
@@ -117,8 +147,44 @@ h1{
     font-weight:bold;
 
     user-select:none;
-    overflow:hidden;
+   overflow:hidden;
+    #game::before{
 
+top:-30px;
+left:-30px;
+
+background:
+radial-gradient(circle,#d4af37 1px,transparent 2px);
+}
+
+#game::after{
+
+bottom:-30px;
+right:-30px;
+
+background:
+radial-gradient(
+
+circle at center,
+
+rgba(255,255,210,.08),
+
+transparent 70%
+),#game::after{
+
+content:"";
+
+position:absolute;
+
+width:180px;
+height:180px;
+
+pointer-events:none;
+
+opacity:.22;
+
+background-repeat:no-repeat;
+}
     transition:
         transform .18s ease,
         box-shadow .18s ease;
