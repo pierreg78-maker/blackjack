@@ -92,11 +92,22 @@ radial-gradient(circle at center,
 
 h1{
     text-align:center;
-    color:#ffd700;
-    margin-bottom:20px;
-    font-size:2rem;
-}
 
+    margin-bottom:24px;
+
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:3rem;
+    font-weight:700;
+    letter-spacing:1px;
+
+    color:#f2cf72;
+
+    text-shadow:
+        0 1px 0 #fff3c4,
+        0 2px 0 #8a5b00,
+        0 4px 8px rgba(0,0,0,.55),
+        0 0 10px rgba(255,215,120,.35);
+}
 .topBar{
     display:flex;
     justify-content:space-between;
