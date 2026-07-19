@@ -147,12 +147,12 @@
         clearCoins();
     }
 
-    function gainCoinCount(betAmount) {
-        const value = Number(betAmount) || 10;
+    function gainCoinCount(payoutAmount) {
+        const value = Math.max(0, Number(payoutAmount) || 0);
 
-        if (value >= 50) return 10;
-        if (value >= 20) return 4;
-        return 2;
+        // Une pièce animée représente 10 pièces d’or créditées.
+        // Exemples : 10 → 1 pièce, 20 → 2, 40 → 4, 100 → 10.
+        return Math.max(1, Math.round(value / 10));
     }
 
     function createWinCoin(startX, startY, travelX, travelY, index) {
