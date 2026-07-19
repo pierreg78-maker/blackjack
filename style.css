@@ -157,25 +157,33 @@ h1{
     font-size:.95rem;
 }
 .cards{
+    grid-column:2;
+
     display:flex;
     flex-wrap:wrap;
     justify-content:center;
+    align-items:center;
+
     gap:8px;
+    min-width:0;
     min-height:112px;
-   order:1;
 }
 
 .playRow{
-
-    display:flex;
-
+    display:grid;
+    grid-template-columns:90px minmax(0, auto) 90px;
     justify-content:center;
-
     align-items:center;
+    column-gap:12px;
 
-    gap:12px;
-
+    width:100%;
 }
+
+/*
+Les cartes occupent toujours la colonne centrale.
+La première colonne invisible équilibre la plaque placée à droite :
+le paquet reste donc parfaitement centré, quel que soit son nombre de cartes.
+*/
 
 
 /* ==========================================================
@@ -376,11 +384,13 @@ h1{
 }
 
 .scoreBox{
+    grid-column:3;
+    justify-self:start;
 
+    width:90px;
     min-width:90px;
 
     padding:10px 12px;
-
     border-radius:10px;
 
     background:
@@ -393,9 +403,7 @@ h1{
     border:2px solid #d7b34d;
 
     color:#f5de97;
-
     text-align:center;
-
     font-weight:bold;
 
     box-shadow:
@@ -865,6 +873,23 @@ body.profile-missing .buttons{
 
     .villageButton span{
         font-size:.62rem;
+    }
+
+    .playRow{
+        grid-template-columns:58px minmax(0, auto) 58px;
+        column-gap:5px;
+    }
+
+    .scoreBox{
+        width:58px;
+        min-width:58px;
+        padding:7px 4px;
+        font-size:.82rem;
+        line-height:1.05;
+    }
+
+    .cards{
+        gap:5px;
     }
 
     .playerInfo{
