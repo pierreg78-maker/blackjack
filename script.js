@@ -786,6 +786,10 @@ async function finishPayment(result) {
             `Blackjack : ${labels[result]} (+${payout} pièces)`
         );
 
+        if (window.AtelierMemoCoins?.showWin) {
+            await window.AtelierMemoCoins.showWin(settledBet);
+        }
+
         return true;
 
     } catch (error) {
