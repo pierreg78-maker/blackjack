@@ -867,12 +867,38 @@ async function startRound() {
     if (roundActive || animationInProgress) {
         return;
     }
+
     animationInProgress = true;
     lockButtons();
 
-    if (!await placeBet()) {
+    /*
+       L'animation démarre immédiatement pendant que Google Sheets
+       enregistre la mise. Elle masque ainsi naturellement le délai réseau.
+    */
+    const coinAnimation =
+        window.AtelierMemoCoins || null;
+
+    const coinArrival =
+        coinAnimation
+            ? coinAnimation.showBet(selectedBet)
+            : Promise.resolve();
+
+    const betAccepted =
+        await placeBet();
+
+    await coinArrival;
+
+    if (!betAccepted) {
+        if (coinAnimation) {
+            await coinAnimation.rejectBet();
+        }
+
         animationInProgress = false;
         return;
+    }
+
+    if (coinAnimation) {
+        await coinAnimation.acceptBet();
     }
 
     deck = shuffleDeck(createDeck());
@@ -1188,6 +1214,10 @@ function resetTable() {
 
     if (animationInProgress) {
         return;
+    }
+
+    if (window.AtelierMemoCoins) {
+        window.AtelierMemoCoins.reset();
     }
 
     roundActive = false;
