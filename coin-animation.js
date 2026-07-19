@@ -33,9 +33,11 @@
     }
 
     function coinCountForBet(amount) {
-        if (amount >= 50) return 5;
-        if (amount >= 20) return 2;
-        return 1;
+        const value = Number(amount) || 10;
+
+        if (value >= 50) return 10;
+        if (value >= 20) return 4;
+        return 2;
     }
 
     function clearClasses() {
@@ -145,6 +147,78 @@
         clearCoins();
     }
 
+    function gainCoinCount(betAmount) {
+        const value = Number(betAmount) || 10;
+
+        if (value >= 50) return 10;
+        if (value >= 20) return 4;
+        return 2;
+    }
+
+    function createWinCoin(startX, startY, travelX, travelY, index) {
+        const coin = document.createElement("div");
+        coin.className = "winCoin";
+        coin.setAttribute("aria-hidden", "true");
+
+        coin.style.left = `${startX}px`;
+        coin.style.top = `${startY}px`;
+        coin.style.setProperty("--travel-x", `${travelX}px`);
+        coin.style.setProperty("--travel-y", `${travelY}px`);
+        coin.style.setProperty("--travel-delay", `${index * 85}ms`);
+        coin.style.setProperty(
+            "--travel-duration",
+            `${820 + (index * 35)}ms`
+        );
+
+        const image = document.createElement("img");
+        image.src = index % 2 === 0 ? COIN_AVERS : COIN_REVERS;
+        image.alt = "";
+        image.draggable = false;
+
+        coin.appendChild(image);
+        document.body.appendChild(coin);
+
+        coin.addEventListener(
+            "animationend",
+            () => coin.remove(),
+            { once: true }
+        );
+
+        return coin;
+    }
+
+    async function showWin(amount) {
+        const game = document.getElementById("game");
+
+        if (!game) return;
+
+        await preloadImages();
+
+        const rect = game.getBoundingClientRect();
+        const count = gainCoinCount(amount);
+
+        const startX = rect.left + (rect.width * .5);
+        const startY = rect.top + (rect.height * .52);
+
+        for (let index = 0; index < count; index++) {
+            const spreadX = (index - ((count - 1) / 2)) * 7;
+            const spreadY = (index % 2 === 0 ? -1 : 1) * 5;
+
+            const targetX = rect.right + 34 + spreadX;
+            const targetY = rect.bottom + 30 + spreadY;
+
+            createWinCoin(
+                startX,
+                startY,
+                targetX - startX,
+                targetY - startY,
+                index
+            );
+        }
+
+        await wait(900 + ((count - 1) * 85));
+    }
+
     function reset() {
         animationToken++;
         clearClasses();
@@ -157,6 +231,7 @@
         showBet,
         acceptBet,
         rejectBet,
+        showWin,
         reset
     });
 })();
