@@ -950,10 +950,10 @@ body.profile-missing .buttons{
 
     position:absolute;
     left:50%;
-    bottom:calc(var(--coin-index) * 5px);
+    bottom:calc(var(--coin-index) * 6px);
 
-    width:58px;
-    height:58px;
+    width:70px;
+    height:70px;
 
     opacity:0;
     transform:translate(-50%,-145px) scale(.58) rotate(-18deg);
@@ -1095,9 +1095,9 @@ body.profile-missing .buttons{
     }
 
     .betCoin{
-        width:46px;
-        height:46px;
-        bottom:calc(var(--coin-index) * 4px);
+        width:56px;
+        height:56px;
+        bottom:calc(var(--coin-index) * 6px);
     }
 
     .betStageLabel{
