@@ -1113,3 +1113,98 @@ body.profile-missing .buttons{
         animation-iteration-count:1;
     }
 }
+
+
+/* ==========================================================
+   ANIMATION 2D DES GAINS
+========================================================== */
+
+.winCoin{
+    position:fixed;
+    z-index:1002;
+
+    left:0;
+    top:0;
+
+    width:52px;
+    height:52px;
+
+    pointer-events:none;
+    user-select:none;
+
+    transform:translate(-50%,-50%);
+    filter:drop-shadow(0 6px 5px rgba(0,0,0,.42));
+
+    animation:winCoinTravel var(--travel-duration, 900ms)
+        cubic-bezier(.22,.7,.2,1)
+        var(--travel-delay, 0ms)
+        forwards;
+}
+
+.winCoin img{
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    border-radius:50%;
+}
+
+@keyframes winCoinTravel{
+    0%{
+        opacity:0;
+        transform:
+            translate(-50%,-50%)
+            translate(0,0)
+            scale(.55)
+            rotate(0deg);
+    }
+
+    14%{
+        opacity:1;
+        transform:
+            translate(-50%,-50%)
+            translate(calc(var(--travel-x) * .10), calc(var(--travel-y) * .02 - 24px))
+            scale(1.08)
+            rotate(35deg);
+    }
+
+    58%{
+        opacity:1;
+        transform:
+            translate(-50%,-50%)
+            translate(calc(var(--travel-x) * .58), calc(var(--travel-y) * .42 - 42px))
+            scale(.96)
+            rotate(210deg);
+    }
+
+    88%{
+        opacity:1;
+        transform:
+            translate(-50%,-50%)
+            translate(calc(var(--travel-x) * .92), calc(var(--travel-y) * .88))
+            scale(.78)
+            rotate(390deg);
+    }
+
+    100%{
+        opacity:0;
+        transform:
+            translate(-50%,-50%)
+            translate(var(--travel-x), var(--travel-y))
+            scale(.46)
+            rotate(470deg);
+    }
+}
+
+@media(max-width:600px){
+    .winCoin{
+        width:44px;
+        height:44px;
+    }
+}
+
+@media(prefers-reduced-motion:reduce){
+    .winCoin{
+        animation-duration:.01ms;
+    }
+}
