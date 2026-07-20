@@ -225,9 +225,55 @@ h1{
     margin-bottom:20px;
 }
 
+.betBox{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.betLabel{
+    font-weight:bold;
+    color:#f2cf72;
+}
+
+.betChoices{
+    display:flex;
+    gap:6px;
+}
+
+.betButton{
+    min-width:50px;
+    padding:8px 12px;
+    border:2px solid #c28a27;
+    border-radius:8px;
+    background:linear-gradient(145deg, #d4a94e, #b8941a);
+    color:#1a1a1a;
+    font-weight:bold;
+    cursor:pointer;
+    transition:all .18s ease;
+}
+
+.betButton:hover{
+    transform:translateY(-2px);
+    box-shadow:0 4px 8px rgba(0,0,0,.3);
+}
+
+.betButton.active{
+    background:linear-gradient(145deg, #f3d476, #e5c948);
+    border-color:#9a6515;
+    box-shadow:0 0 12px rgba(255,215,120,.5);
+}
+
 .infoBox{
     background:rgba(255,255,255,.12);
     padding:10px 16px;
+    border-radius:12px;
+    font-weight:bold;
+}
+
+.playerName{
+    background:rgba(255,255,255,.12);
+    padding:10px 14px;
     border-radius:12px;
     font-weight:bold;
 }
@@ -449,421 +495,360 @@ le paquet reste donc parfaitement centré, quel que soit son nombre de cartes.
             #102b58
         );
 
-    border:3px solid #d4af37;
+    border:2px solid #1a3d5c;
 
     box-shadow:
-        0 5px 10px rgba(0,0,0,.4),
-        inset 0 0 0 2px #07152f,
-        inset 0 0 0 4px #e1c15f;
+        inset 0 0 0 1px rgba(100,180,255,.12),
+        0 5px 9px rgba(0,0,0,.28);
 }
 
-.card-back-inner{
-    width:100%;
-    height:100%;
+.card.card-hidden::before,
+.card.card-hidden::after{
+    --spade-accent: #f4d36c;
 
-    display:flex;
-    flex-direction:column;
+    content:"♠";
 
-    align-items:center;
-    justify-content:center;
+    position:absolute;
 
-    border:1px solid rgba(244,211,108,.8);
-    border-radius:6px;
+    font-size:38px;
 
-    text-align:center;
+    color:var(--spade-accent);
 
-    font-family:Georgia, "Times New Roman", serif;
-}
-
-.card-back-star{
-    font-size:13px;
-    letter-spacing:2px;
-}
-
-.card-back-title{
-    margin:7px 0;
-
-    font-size:16px;
-    line-height:1.05;
+    opacity:.85;
 
     text-shadow:
-        0 1px 0 #000,
-        0 0 5px rgba(244,211,108,.4);
+        0 0 8px rgba(244,211,108,.25);
 }
 
-.scoreBox{
-    grid-column:3;
-    justify-self:start;
-
-    width:90px;
-    min-width:90px;
-
-    padding:10px 12px;
-    border-radius:10px;
-
-    background:
-        linear-gradient(
-            180deg,
-            #4f3515,
-            #2e1d08
-        );
-
-    border:2px solid #d7b34d;
-
-    color:#f5de97;
-    text-align:center;
-    font-weight:bold;
-
-    box-shadow:
-        inset 0 1px 1px rgba(255,255,255,.12),
-        0 5px 10px rgba(0,0,0,.35);
-}
-.message{
-    margin:12px 0;
-    text-align:center;
-    font-size:1.2rem;
-    color:#ffe082;
-    min-height:24px;
+.card.card-hidden::before{
+    top:11px;
+    left:11px;
 }
 
-.buttons{
-    display:flex;
-    justify-content:center;
-    flex-wrap:wrap;
-    gap:8px;
+.card.card-hidden::after{
+    bottom:11px;
+    right:11px;
+
+    transform:rotate(180deg);
 }
 
-button{
-    border:none;
-    border-radius:30px;
-    padding:11px 18px;
-    cursor:pointer;
-    font-size:1rem;
-    font-weight:bold;
-    transition:.2s;
-}
-
-button:hover{
-    transform:scale(1.05);
-}
-
-#dealBtn{
-    background:#2196f3;
-    color:white;
-}
-
-#hitBtn{
-    background:#4caf50;
-    color:white;
-}
-
-#standBtn{
-    background:#ff9800;
-    color:white;
-}
-
-#newBtn{
-    background:#9c27b0;
-    color:white;
-}
-
-button:disabled{
-    opacity:.45;
-    cursor:not-allowed;
-    transform:none;
-}
-
-
-/* ==========================================================
-   ANIMATION BLACKJACK NATUREL
-========================================================== */
-
-.blackjack-overlay{
-    position:fixed;
-    inset:0;
-    z-index:1000;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    padding:20px;
-
-    background:rgba(0,0,0,.42);
-    backdrop-filter:blur(2px);
-
-    opacity:0;
-    pointer-events:none;
-
-    transition:opacity .25s ease;
-}
-
-.blackjack-overlay.visible{
-    opacity:1;
-    pointer-events:auto;
-}
-
-.blackjack-banner{
+.card.card-hidden .card-center{
     position:relative;
+    top:0;
+    left:0;
+    transform:none;
 
-    padding:24px 34px;
+    font-size:42px;
 
-    border:4px solid #ffd700;
-    border-radius:22px;
-
-    background:
-        radial-gradient(
-            circle at center,
-            #fff7b0 0%,
-            #e9ad18 34%,
-            #7a4300 100%
-        );
-
-    color:#fff;
-
-    font-family:Georgia, "Times New Roman", serif;
-    font-size:clamp(2rem, 8vw, 4.6rem);
-    font-weight:bold;
-    text-align:center;
-    letter-spacing:2px;
-
-    text-shadow:
-        0 3px 0 #7a4300,
-        0 0 10px #fff,
-        0 0 22px #ffd700;
-
-    box-shadow:
-        0 0 22px rgba(255,215,0,.95),
-        0 0 55px rgba(255,165,0,.7);
-
-    transform:scale(.35) rotate(-5deg);
-}
-
-.blackjack-overlay.visible .blackjack-banner{
-    animation:blackjackEntrance .75s
-        cubic-bezier(.17,.89,.32,1.35)
-        forwards;
-}
-
-.blackjack-subtitle{
-    display:block;
-
-    margin-top:10px;
-
-    font-family:Arial, Helvetica, sans-serif;
-    font-size:clamp(.9rem, 3vw, 1.25rem);
-    letter-spacing:0;
-
-    color:#fff8d5;
-
-    text-shadow:
-        0 2px 4px rgba(0,0,0,.65);
-}
-
-.blackjack-glow{
-    animation:blackjackCardsGlow .75s ease-in-out
-        infinite alternate;
-}
-
-.gold-coin{
-    position:fixed;
-    z-index:1001;
-
-    top:-50px;
-
-    width:30px;
-    height:30px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    border:2px solid #fff1a3;
-    border-radius:50%;
-
-    background:
-        radial-gradient(
-            circle at 35% 30%,
-            #fff8ad 0%,
-            #ffd700 32%,
-            #c78000 72%,
-            #7a4300 100%
-        );
-
-    color:#7a4300;
-
-    font-size:18px;
-    font-weight:bold;
-
-    box-shadow:
-        0 3px 7px rgba(0,0,0,.4),
-        inset 0 0 5px rgba(255,255,255,.8);
-
-    pointer-events:none;
-
-    animation:coinFall linear forwards;
-}
-
-@keyframes blackjackEntrance{
-
-    0%{
-        opacity:0;
-        transform:scale(.35) rotate(-5deg);
-    }
-
-    60%{
-        opacity:1;
-        transform:scale(1.12) rotate(2deg);
-    }
-
-    80%{
-        transform:scale(.96) rotate(-1deg);
-    }
-
-    100%{
-        opacity:1;
-        transform:scale(1) rotate(0deg);
-    }
-}
-
-@keyframes blackjackCardsGlow{
-
-    from{
-        filter:
-            drop-shadow(0 0 3px #ffd700);
-        transform:translateY(0);
-    }
-
-    to{
-        filter:
-            drop-shadow(0 0 16px #fff176);
-        transform:translateY(-4px);
-    }
-}
-
-@keyframes coinFall{
-
-    0%{
-        opacity:0;
-        transform:
-            translateY(-40px)
-            rotateY(0deg)
-            rotateZ(0deg);
-    }
-
-    10%{
-        opacity:1;
-    }
-
-    100%{
-        opacity:1;
-        transform:
-            translateY(115vh)
-            rotateY(900deg)
-            rotateZ(360deg);
-    }
-}
-
-/* ==========================================================
-   CHOIX DE LA MISE
-========================================================== */
-
-.betBox{
-    display:flex;
-    align-items:center;
-    gap:10px;
-
-    padding:7px 10px;
-
-    border-radius:14px;
-
-    background:rgba(255,255,255,.12);
-}
-
-.betLabel{
-    font-weight:bold;
-    white-space:nowrap;
-}
-
-.betChoices{
-    display:flex;
-    gap:6px;
-}
-
-.betButton{
-    min-width:45px;
-
-    padding:8px 11px;
-
-    border:2px solid transparent;
-    border-radius:20px;
-
-    background:rgba(0,0,0,.25);
-    color:#fff;
-
-    font-size:.95rem;
-    font-weight:bold;
-}
-
-.betButton:hover{
-    transform:translateY(-1px);
-}
-
-.betButton.active{
-    border-color:#fff3a0;
-
-    background:
-        linear-gradient(
-            180deg,
-            #ffd84d,
-            #d99a00
-        );
-
-    color:#4d3000;
-
-    box-shadow:
-        0 0 10px rgba(255,215,0,.55);
-}
-
-.betButton:disabled{
-    opacity:.4;
+    filter:
+        drop-shadow(0 2px 1px rgba(0,0,0,.50))
+        drop-shadow(0 0 4px rgba(100,180,255,.15));
 }
 
 @media(max-width:600px){
-
-    .blackjack-banner{
-        width:92%;
-        padding:20px 12px;
-        border-width:3px;
+    .card{
+        width:62px;
+        height:88px;
     }
 
-    .gold-coin{
-        width:25px;
-        height:25px;
-        font-size:15px;
-    }
-       .betBox{
-        width:100%;
-        justify-content:center;
+    .card.card-hidden::before,
+    .card.card-hidden::after{
+        font-size:28px;
     }
 
-    .topBar{
-        justify-content:center;
+    .card-corner{
+        font-size:13px;
     }
 
-    .betButton{
-        min-width:42px;
-        padding:7px 10px;
+    .card-center{
+        font-size:28px;
+    }
+
+    .card-center.figure{
+        width:38px;
+        height:50px;
+        font-size:22px;
     }
 }
 
-@media(prefers-reduced-motion:reduce){
 
-    .blackjack-overlay.visible .blackjack-banner,
-    .blackjack-glow,
-    .gold-coin{
-        animation-duration:.01ms;
-        animation-iteration-count:1;
+/* ==========================================================
+   BOÎTE D'AFFICHAGE DU SCORE
+========================================================== */
+
+.scoreBox{
+    grid-column:3;
+
+    width:90px;
+
+    padding:10px 8px;
+
+    border:2px solid #c28a27;
+    border-radius:12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0,0,0,.18),
+            rgba(255,215,120,.08)
+        );
+
+    text-align:center;
+
+    font-family:Georgia, "Times New Roman", serif;
+    font-weight:bold;
+
+    color:#efc247;
+
+    text-shadow:
+        0 1px 2px rgba(0,0,0,.6);
+
+    line-height:1.1;
+    font-size:.95rem;
+}
+
+.scoreBox span{
+    display:block;
+    font-size:1.85rem;
+    font-weight:bold;
+    letter-spacing:0;
+
+    text-shadow:
+        0 2px 4px rgba(0,0,0,.6),
+        0 0 8px rgba(255,215,120,.2);
+}
+
+@media(max-width:600px){
+    .scoreBox{
+        width:58px;
+        min-width:58px;
+        padding:7px 4px;
+        font-size:.82rem;
+        line-height:1.05;
+    }
+
+    .scoreBox span{
+        font-size:1.35rem;
+    }
+}
+
+
+/* ==========================================================
+   MESSAGE ET STATUT DE SYNCHRONISATION
+========================================================== */
+
+#message{
+    margin:14px 0 12px;
+    padding:8px 12px;
+
+    text-align:center;
+    font-size:.95rem;
+    font-weight:600;
+    color:#d8f1ff;
+
+    text-shadow:0 1px 2px rgba(0,0,0,.5);
+
+    min-height:20px;
+    line-height:1.3;
+}
+
+#message.error{
+    color:#ffd3d3;
+}
+
+#message.success{
+    color:#d9ffd9;
+}
+
+#message.warning{
+    color:#ffe59a;
+}
+
+
+/* ==========================================================
+   BOUTONS DE JEUX
+========================================================== */
+
+.buttons{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:12px;
+
+    margin-top:24px;
+}
+
+.buttons button{
+    position:relative;
+    z-index:2;
+
+    min-width:140px;
+    padding:14px 22px;
+
+    border:none;
+    border-radius:14px;
+
+    font-family:Arial, sans-serif;
+    font-size:1.05rem;
+    font-weight:bold;
+    letter-spacing:.5px;
+
+    color:#fff;
+
+    cursor:pointer;
+
+    transition:all .18s ease;
+
+    user-select:none;
+}
+
+#dealBtn{
+    background:
+        linear-gradient(
+            145deg,
+            #2f5fa8,
+            #1e4287
+        );
+
+    border:2px solid #3d7fd6;
+
+    box-shadow:
+        0 4px 12px rgba(20,60,150,.3),
+        inset 0 1px 0 rgba(255,255,255,.2);
+}
+
+#dealBtn:hover:not(:disabled){
+    transform:translateY(-2px);
+    box-shadow:
+        0 6px 16px rgba(20,60,150,.4),
+        inset 0 1px 0 rgba(255,255,255,.2);
+}
+
+#dealBtn:active:not(:disabled){
+    transform:translateY(0);
+    box-shadow:
+        0 2px 6px rgba(20,60,150,.3),
+        inset 0 1px 0 rgba(255,255,255,.2);
+}
+
+#hitBtn{
+    background:
+        linear-gradient(
+            145deg,
+            #2d7d3a,
+            #1e5428
+        );
+
+    border:2px solid #4aa347;
+
+    box-shadow:
+        0 4px 12px rgba(50,130,70,.3),
+        inset 0 1px 0 rgba(255,255,255,.2);
+}
+
+#hitBtn:hover:not(:disabled){
+    transform:translateY(-2px);
+    box-shadow:
+        0 6px 16px rgba(50,130,70,.4),
+        inset 0 1px 0 rgba(255,255,255,.2);
+}
+
+#hitBtn:active:not(:disabled){
+    transform:translateY(0);
+    box-shadow:
+        0 2px 6px rgba(50,130,70,.3),
+        inset 0 1px 0 rgba(255,255,255,.2);
+}
+
+#standBtn{
+    background:
+        linear-gradient(
+            145deg,
+            #994422,
+            #6d3216
+        );
+
+    border:2px solid #c26636;
+
+    box-shadow:
+        0 4px 12px rgba(150,70,40,.3),
+        inset 0 1px 0 rgba(255,255,255,.2);
+}
+
+#standBtn:hover:not(:disabled){
+    transform:translateY(-2px);
+    box-shadow:
+        0 6px 16px rgba(150,70,40,.4),
+        inset 0 1px 0 rgba(255,255,255,.2);
+}
+
+#standBtn:active:not(:disabled){
+    transform:translateY(0);
+    box-shadow:
+        0 2px 6px rgba(150,70,40,.3),
+        inset 0 1px 0 rgba(255,255,255,.2);
+}
+
+#newBtn{
+    background:
+        linear-gradient(
+            145deg,
+            #5a2e7d,
+            #3d1b5c
+        );
+
+    border:2px solid #7d4ab8;
+
+    box-shadow:
+        0 4px 12px rgba(100,40,150,.3),
+        inset 0 1px 0 rgba(255,255,255,.2);
+}
+
+#newBtn:hover:not(:disabled){
+    transform:translateY(-2px);
+    box-shadow:
+        0 6px 16px rgba(100,40,150,.4),
+        inset 0 1px 0 rgba(255,255,255,.2);
+}
+
+#newBtn:active:not(:disabled){
+    transform:translateY(0);
+    box-shadow:
+        0 2px 6px rgba(100,40,150,.3),
+        inset 0 1px 0 rgba(255,255,255,.2);
+}
+
+.buttons button:disabled{
+    opacity:.5;
+    cursor:not-allowed;
+}
+
+.buttons button::before{
+    content:"";
+    position:absolute;
+    inset:0;
+
+    background:
+        radial-gradient(
+            circle at 30% 30%,
+            rgba(255,255,255,.1) 0%,
+            transparent 70%
+        );
+
+    border-radius:14px;
+
+    pointer-events:none;
+}
+
+@media(max-width:600px){
+    .buttons{
+        gap:8px;
+    }
+
+    .buttons button{
+        min-width:100px;
+        padding:10px 16px;
+        font-size:.9rem;
     }
 }
 
@@ -920,13 +905,6 @@ button:disabled{
     flex-wrap:wrap;
     align-items:center;
     gap:8px;
-}
-
-.playerName{
-    background:rgba(255,255,255,.12);
-    padding:10px 14px;
-    border-radius:12px;
-    font-weight:bold;
 }
 
 .syncStatus{
@@ -988,18 +966,6 @@ body.profile-missing .buttons{
         column-gap:5px;
     }
 
-    .scoreBox{
-        width:58px;
-        min-width:58px;
-        padding:7px 4px;
-        font-size:.82rem;
-        line-height:1.05;
-    }
-
-    .cards{
-        gap:5px;
-    }
-
     .playerInfo{
         width:100%;
         justify-content:center;
@@ -1021,16 +987,16 @@ body.profile-missing .buttons{
     position:absolute;
     z-index:15;
 
-    top:46%;
+    top:50%;
     left:50%;
 
-    width:150px;
-    height:105px;
+    width:200px;
+    height:140px;
 
     display:flex;
     flex-direction:column;
     align-items:center;
-    justify-content:flex-end;
+    justify-content:center;
 
     pointer-events:none;
     opacity:0;
@@ -1048,8 +1014,32 @@ body.profile-missing .buttons{
 
 .betPot{
     position:relative;
-    width:92px;
-    height:72px;
+    width:160px;
+    height:100px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border:2px solid #c28a27;
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            ellipse at 50% 30%,
+            rgba(255,215,120,.15),
+            rgba(255,215,120,.05)
+        ),
+        linear-gradient(
+            145deg,
+            rgba(16, 90, 49, 0.4),
+            rgba(5, 30, 15, 0.6)
+        );
+
+    box-shadow:
+        inset 0 0 12px rgba(0,0,0,.2),
+        0 4px 12px rgba(0,0,0,.2);
+
     perspective:700px;
 }
 
@@ -1057,20 +1047,18 @@ body.profile-missing .buttons{
     --coin-index:0;
 
     position:absolute;
-    left:50%;
-    bottom:calc(var(--coin-index) * 6px);
 
-    width:70px;
-    height:70px;
+    width:80px;
+    height:80px;
 
     opacity:0;
-    transform:translate(-50%,-145px) scale(.58) rotate(-18deg);
+    transform:translate(0, -80px) scale(.6) rotate(-18deg);
 
     animation:betCoinArrival 720ms
         cubic-bezier(.18,.82,.28,1.22)
         forwards;
 
-    filter:drop-shadow(0 6px 5px rgba(0,0,0,.4));
+    filter:drop-shadow(0 4px 8px rgba(0,0,0,.4));
 }
 
 .betCoinSpinner{
@@ -1112,13 +1100,17 @@ body.profile-missing .buttons{
 }
 
 .betStageLabel{
-    margin-top:3px;
+    position:absolute;
+    bottom:16px;
+    left:50%;
+    transform:translateX(-50%);
 
     color:#ffe59a;
     font-family:Georgia,"Times New Roman",serif;
-    font-size:.84rem;
+    font-size:.92rem;
     font-weight:bold;
     letter-spacing:.25px;
+    white-space:nowrap;
 
     text-shadow:0 2px 3px rgba(0,0,0,.75);
 }
@@ -1134,21 +1126,21 @@ body.profile-missing .buttons{
 @keyframes betCoinArrival{
     0%{
         opacity:0;
-        transform:translate(-50%,-145px) scale(.58) rotate(-18deg);
+        transform:translate(0, -80px) scale(.6) rotate(-18deg);
     }
 
     70%{
         opacity:1;
-        transform:translate(-50%,6px) scale(1.08) rotate(3deg);
+        transform:translate(0, 8px) scale(1.1) rotate(3deg);
     }
 
     86%{
-        transform:translate(-50%,-5px) scale(.98) rotate(-1deg);
+        transform:translate(0, -6px) scale(.96) rotate(-1deg);
     }
 
     100%{
         opacity:1;
-        transform:translate(-50%,0) scale(1) rotate(0deg);
+        transform:translate(0, 0) scale(1) rotate(0deg);
     }
 }
 
@@ -1158,58 +1150,58 @@ body.profile-missing .buttons{
 }
 
 @keyframes betPotPulse{
-    from{ transform:translateY(0); }
-    to{ transform:translateY(-2px); }
+    from{ transform:scale(1); }
+    to{ transform:scale(1.02); }
 }
 
 @keyframes betCoinAccepted{
     0%{
         opacity:1;
-        transform:translate(-50%,0) scale(1);
+        transform:translate(0, 0) scale(1);
     }
 
     100%{
         opacity:0;
-        transform:translate(-50%,-36px) scale(.58) rotate(10deg);
+        transform:translate(0, -50px) scale(.58) rotate(10deg);
     }
 }
 
 @keyframes betCoinRejected{
     0%{
         opacity:1;
-        transform:translate(-50%,0) scale(1);
+        transform:translate(0, 0) scale(1);
     }
 
     40%{
-        transform:translate(-50%,-18px) scale(1.04) rotate(-8deg);
+        transform:translate(0, -20px) scale(1.04) rotate(-8deg);
     }
 
     100%{
         opacity:0;
-        transform:translate(-135px,-100px) scale(.68) rotate(-35deg);
+        transform:translate(-80px, -80px) scale(.68) rotate(-35deg);
     }
 }
 
 @media(max-width:600px){
     .betStage{
-        top:47%;
-        width:115px;
-        height:88px;
+        top:48%;
+        width:150px;
+        height:110px;
     }
 
     .betPot{
-        width:74px;
-        height:58px;
+        width:130px;
+        height:80px;
     }
 
     .betCoin{
-        width:56px;
-        height:56px;
-        bottom:calc(var(--coin-index) * 6px);
+        width:60px;
+        height:60px;
     }
 
     .betStageLabel{
-        font-size:.72rem;
+        font-size:.75rem;
+        bottom:12px;
     }
 }
 
