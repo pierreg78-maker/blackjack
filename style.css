@@ -74,7 +74,7 @@ body{
 
     border:12px solid transparent;
     border-radius:22px;
-    padding:24px;
+    padding:40px 32px;
 
     background-clip:padding-box;
 
@@ -113,8 +113,8 @@ h1::after,
     position:absolute;
     z-index:0;
 
-    width:128px;
-    height:128px;
+    width:200px;
+    height:200px;
 
     background-image:url("https://raw.githubusercontent.com/pierreg78-maker/AtelierMemo-Assets/refs/heads/main/assets/casino/casino-ui/Ornements/coin-cadre-or.svg");
     background-repeat:no-repeat;
@@ -122,33 +122,33 @@ h1::after,
     background-size:contain;
 
     pointer-events:none;
-    opacity:.92;
+    opacity:.95;
 
     filter:
-        drop-shadow(0 2px 2px rgba(57,31,3,.55))
-        drop-shadow(0 0 3px rgba(255,220,116,.22));
+        drop-shadow(0 3px 3px rgba(57,31,3,.65))
+        drop-shadow(0 0 8px rgba(255,220,116,.35));
 }
 
 h1::before{
-    top:13px;
-    left:13px;
+    top:-35px;
+    left:-35px;
 }
 
 h1::after{
-    top:13px;
-    right:13px;
+    top:-35px;
+    right:-35px;
     transform:scaleX(-1);
 }
 
 .buttons::before{
-    bottom:13px;
-    left:13px;
+    bottom:-35px;
+    left:-35px;
     transform:scaleY(-1);
 }
 
 .buttons::after{
-    right:13px;
-    bottom:13px;
+    right:-35px;
+    bottom:-35px;
     transform:rotate(180deg);
 }
 
@@ -279,7 +279,7 @@ h1{
 }
 
 .zone{
-    margin-top:16px;
+    margin-top:28px;
 }
 
 .zone h2{
@@ -669,13 +669,17 @@ le paquet reste donc parfaitement centré, quel que soit son nombre de cartes.
    BOUTONS DE JEUX
 ========================================================== */
 
+#message{
+    margin-bottom:16px;
+}
+
 .buttons{
     display:flex;
     flex-wrap:wrap;
     justify-content:center;
     gap:12px;
 
-    margin-top:24px;
+    margin-top:32px;
 }
 
 .buttons button{
@@ -700,6 +704,10 @@ le paquet reste donc parfaitement centré, quel que soit son nombre de cartes.
     transition:all .18s ease;
 
     user-select:none;
+}
+
+#dealBtn::before{
+    content:"🂡 ";
 }
 
 #dealBtn{
@@ -731,6 +739,10 @@ le paquet reste donc parfaitement centré, quel que soit son nombre de cartes.
         inset 0 1px 0 rgba(255,255,255,.2);
 }
 
+#hitBtn::before{
+    content:"✋ ";
+}
+
 #hitBtn{
     background:
         linear-gradient(
@@ -760,6 +772,10 @@ le paquet reste donc parfaitement centré, quel que soit son nombre de cartes.
         inset 0 1px 0 rgba(255,255,255,.2);
 }
 
+#standBtn::before{
+    content:"✋ ";
+}
+
 #standBtn{
     background:
         linear-gradient(
@@ -787,6 +803,10 @@ le paquet reste donc parfaitement centré, quel que soit son nombre de cartes.
     box-shadow:
         0 2px 6px rgba(150,70,40,.3),
         inset 0 1px 0 rgba(255,255,255,.2);
+}
+
+#newBtn::before{
+    content:"♠ ";
 }
 
 #newBtn{
@@ -990,8 +1010,8 @@ body.profile-missing .buttons{
     top:50%;
     left:50%;
 
-    width:200px;
-    height:140px;
+    width:280px;
+    height:160px;
 
     display:flex;
     flex-direction:column;
@@ -1004,6 +1024,24 @@ body.profile-missing .buttons{
 
     transform:translate(-50%,-50%) scale(.92);
     transition:opacity .18s ease, transform .18s ease;
+}
+
+.betStage::before,
+.betStage::after{
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    height:1px;
+    background:linear-gradient(90deg, transparent, #c28a27, transparent);
+}
+
+.betStage::before{
+    top:20px;
+}
+
+.betStage::after{
+    bottom:20px;
 }
 
 .betStage.visible{
