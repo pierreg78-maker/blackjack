@@ -11,11 +11,9 @@
 
 body{
     font-family:Arial, Helvetica, sans-serif;
-   background:
-radial-gradient(circle at center,
-#155f27 0%,
-#0d4d1e 45%,
-#083716 100%);
+    background:
+        radial-gradient(ellipse at 50% 35%, rgba(39,122,68,.30) 0%, rgba(12,71,36,.12) 40%, transparent 66%),
+        linear-gradient(180deg, #0d4625 0%, #072f19 58%, #041d10 100%);
     color:#fff;
     min-height:100vh;
     display:flex;
@@ -27,39 +25,23 @@ radial-gradient(circle at center,
 #game{
     position:relative;
     overflow:hidden;
-
     width:100%;
     max-width:900px;
-
     background:
-        radial-gradient(
-            circle at 50% 45%,
-            rgba(255,255,210,.08),
-            transparent 70%
-        ),
-        radial-gradient(
-            circle at 50% 45%,
-            rgba(255,255,255,.05),
-            transparent 60%
-        ),
-        repeating-radial-gradient(
-            circle,
-            rgba(255,255,255,.015) 0,
-            rgba(255,255,255,.015) 2px,
-            transparent 3px,
-            transparent 8px
-        ),
-        linear-gradient(
-            180deg,
-            #14692d,
-            #0f5824
-        );
-
+        radial-gradient(ellipse at 50% 42%, rgba(255,245,188,.12) 0%, rgba(255,241,174,.045) 30%, transparent 66%),
+        radial-gradient(ellipse at 50% 120%, rgba(0,0,0,.32) 0%, transparent 58%),
+        repeating-linear-gradient(18deg, rgba(255,255,255,.018) 0, rgba(255,255,255,.018) 1px, transparent 1px, transparent 5px),
+        repeating-linear-gradient(108deg, rgba(0,0,0,.018) 0, rgba(0,0,0,.018) 1px, transparent 1px, transparent 6px),
+        linear-gradient(180deg, #176d3d 0%, #105a31 46%, #0a4526 100%);
     border:10px solid #4b2d12;
-    border-radius:18px;
-    padding:20px;
-
+    border-radius:22px;
+    padding:24px;
+    outline:1px solid rgba(255,236,166,.32);
+    outline-offset:-16px;
     box-shadow:
+        inset 0 0 0 2px rgba(255,235,163,.72),
+        inset 0 0 0 5px rgba(75,46,13,.82),
+        inset 0 0 34px rgba(0,0,0,.28),
         0 0 0 2px #d7b34d,
         0 0 0 6px #2a1608,
         0 18px 40px rgba(0,0,0,.45);
@@ -69,25 +51,43 @@ radial-gradient(circle at center,
 #game::after{
     content:"";
     position:absolute;
-    width:180px;
-    height:180px;
+    z-index:0;
+    width:190px;
+    height:190px;
     pointer-events:none;
-    opacity:.22;
+    opacity:.72;
     background-repeat:no-repeat;
+    filter:drop-shadow(0 1px 1px rgba(0,0,0,.35));
 }
 
 #game::before{
-    top:-30px;
-    left:-30px;
+    top:16px;
+    left:16px;
     background:
-        radial-gradient(circle,#d4af37 1px,transparent 2px);
+        radial-gradient(circle at 25px 25px, #e6c869 0 2px, transparent 2.6px),
+        radial-gradient(circle at 46px 46px, transparent 0 18px, rgba(223,190,92,.92) 18.8px 20px, transparent 20.8px),
+        radial-gradient(circle at 63px 63px, transparent 0 27px, rgba(195,151,49,.72) 27.8px 29px, transparent 29.8px),
+        conic-gradient(from 18deg at 43px 43px, transparent 0 8deg, rgba(229,197,101,.92) 8deg 12deg, transparent 12deg 33deg, rgba(229,197,101,.72) 33deg 36deg, transparent 36deg 360deg);
+    -webkit-mask-image:linear-gradient(135deg,#000 0 54%,transparent 82%);
+    mask-image:linear-gradient(135deg,#000 0 54%,transparent 82%);
 }
 
 #game::after{
-    right:-30px;
-    bottom:-30px;
+    right:16px;
+    bottom:16px;
+    transform:rotate(180deg);
     background:
-        radial-gradient(circle,#d4af37 1px,transparent 2px);
+        radial-gradient(circle at 25px 25px, #e6c869 0 2px, transparent 2.6px),
+        radial-gradient(circle at 46px 46px, transparent 0 18px, rgba(223,190,92,.92) 18.8px 20px, transparent 20.8px),
+        radial-gradient(circle at 63px 63px, transparent 0 27px, rgba(195,151,49,.72) 27.8px 29px, transparent 29.8px),
+        conic-gradient(from 18deg at 43px 43px, transparent 0 8deg, rgba(229,197,101,.92) 8deg 12deg, transparent 12deg 33deg, rgba(229,197,101,.72) 33deg 36deg, transparent 36deg 360deg);
+    -webkit-mask-image:linear-gradient(135deg,#000 0 54%,transparent 82%);
+    mask-image:linear-gradient(135deg,#000 0 54%,transparent 82%);
+}
+
+#game > *{
+    position:relative;
+    z-index:1;
 }
 
 h1{
@@ -1207,4 +1207,12 @@ body.profile-missing .buttons{
     .winCoin{
         animation-duration:.01ms;
     }
+}
+
+
+@media(max-width:600px){
+    #game{ outline-offset:-9px; }
+    #game::before, #game::after{ width:110px; height:110px; opacity:.52; }
+    #game::before{ top:8px; left:8px; transform:scale(.72); transform-origin:top left; }
+    #game::after{ right:8px; bottom:8px; transform:rotate(180deg) scale(.72); transform-origin:bottom right; }
 }
