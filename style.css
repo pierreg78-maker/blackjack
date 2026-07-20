@@ -677,178 +677,139 @@ le paquet reste donc parfaitement centré, quel que soit son nombre de cartes.
 .buttons{
     display:flex;
     flex-wrap:nowrap;
-    justify-content:space-between;
+}
+
+#newBtn{
+    position:absolute;
+    right:0;
+}
+
+@media(max-width:600px){
+    .buttons{
+        gap:8px;
+    }
+
+    .buttons button{
+        min-width:100px;
+        padding:10px 16px;
+        font-size:.9rem;
+    }
+}
+
+
+/* ==========================================================
+   BOUTONS DE JEUX
+========================================================== */
+
+.buttons{
+    display:flex;
+    justify-content:center;
     align-items:center;
     gap:12px;
-
     margin-top:32px;
     position:relative;
+    height:60px;
 }
 
 .buttons button{
     position:relative;
     z-index:2;
-
     min-width:140px;
     padding:14px 22px;
-    flex:0 0 auto;
-}
-
-.buttons #dealBtn{
-    margin-right:auto;
-}
-
-.buttons #newBtn{
-    margin-left:auto;
-}
-
     border:none;
     border-radius:14px;
-
     font-family:Arial, sans-serif;
     font-size:1.05rem;
     font-weight:bold;
     letter-spacing:.5px;
-
     color:#fff;
-
     cursor:pointer;
-
     transition:all .18s ease;
-
     user-select:none;
+}
+
+#dealBtn{
+    position:absolute;
+    left:0;
+    background:linear-gradient(145deg, #2f5fa8, #1e4287);
+    border:2px solid #3d7fd6;
+    box-shadow:0 4px 12px rgba(20,60,150,.3), inset 0 1px 0 rgba(255,255,255,.2);
 }
 
 #dealBtn::before{
     content:"🂡 ";
 }
 
-#dealBtn{
-    background:
-        linear-gradient(
-            145deg,
-            #2f5fa8,
-            #1e4287
-        );
-
-    border:2px solid #3d7fd6;
-
-    box-shadow:
-        0 4px 12px rgba(20,60,150,.3),
-        inset 0 1px 0 rgba(255,255,255,.2);
-}
-
 #dealBtn:hover:not(:disabled){
     transform:translateY(-2px);
-    box-shadow:
-        0 6px 16px rgba(20,60,150,.4),
-        inset 0 1px 0 rgba(255,255,255,.2);
+    box-shadow:0 6px 16px rgba(20,60,150,.4), inset 0 1px 0 rgba(255,255,255,.2);
 }
 
 #dealBtn:active:not(:disabled){
     transform:translateY(0);
-    box-shadow:
-        0 2px 6px rgba(20,60,150,.3),
-        inset 0 1px 0 rgba(255,255,255,.2);
+    box-shadow:0 2px 6px rgba(20,60,150,.3), inset 0 1px 0 rgba(255,255,255,.2);
+}
+
+#hitBtn{
+    background:linear-gradient(145deg, #2d7d3a, #1e5428);
+    border:2px solid #4aa347;
+    box-shadow:0 4px 12px rgba(50,130,70,.3), inset 0 1px 0 rgba(255,255,255,.2);
 }
 
 #hitBtn::before{
     content:"✋ ";
 }
 
-#hitBtn{
-    background:
-        linear-gradient(
-            145deg,
-            #2d7d3a,
-            #1e5428
-        );
-
-    border:2px solid #4aa347;
-
-    box-shadow:
-        0 4px 12px rgba(50,130,70,.3),
-        inset 0 1px 0 rgba(255,255,255,.2);
-}
-
 #hitBtn:hover:not(:disabled){
     transform:translateY(-2px);
-    box-shadow:
-        0 6px 16px rgba(50,130,70,.4),
-        inset 0 1px 0 rgba(255,255,255,.2);
+    box-shadow:0 6px 16px rgba(50,130,70,.4), inset 0 1px 0 rgba(255,255,255,.2);
 }
 
 #hitBtn:active:not(:disabled){
     transform:translateY(0);
-    box-shadow:
-        0 2px 6px rgba(50,130,70,.3),
-        inset 0 1px 0 rgba(255,255,255,.2);
+    box-shadow:0 2px 6px rgba(50,130,70,.3), inset 0 1px 0 rgba(255,255,255,.2);
+}
+
+#standBtn{
+    background:linear-gradient(145deg, #994422, #6d3216);
+    border:2px solid #c26636;
+    box-shadow:0 4px 12px rgba(150,70,40,.3), inset 0 1px 0 rgba(255,255,255,.2);
 }
 
 #standBtn::before{
     content:"✋ ";
 }
 
-#standBtn{
-    background:
-        linear-gradient(
-            145deg,
-            #994422,
-            #6d3216
-        );
-
-    border:2px solid #c26636;
-
-    box-shadow:
-        0 4px 12px rgba(150,70,40,.3),
-        inset 0 1px 0 rgba(255,255,255,.2);
-}
-
 #standBtn:hover:not(:disabled){
     transform:translateY(-2px);
-    box-shadow:
-        0 6px 16px rgba(150,70,40,.4),
-        inset 0 1px 0 rgba(255,255,255,.2);
+    box-shadow:0 6px 16px rgba(150,70,40,.4), inset 0 1px 0 rgba(255,255,255,.2);
 }
 
 #standBtn:active:not(:disabled){
     transform:translateY(0);
-    box-shadow:
-        0 2px 6px rgba(150,70,40,.3),
-        inset 0 1px 0 rgba(255,255,255,.2);
+    box-shadow:0 2px 6px rgba(150,70,40,.3), inset 0 1px 0 rgba(255,255,255,.2);
+}
+
+#newBtn{
+    position:absolute;
+    right:0;
+    background:linear-gradient(145deg, #5a2e7d, #3d1b5c);
+    border:2px solid #7d4ab8;
+    box-shadow:0 4px 12px rgba(100,40,150,.3), inset 0 1px 0 rgba(255,255,255,.2);
 }
 
 #newBtn::before{
     content:"♠ ";
 }
 
-#newBtn{
-    background:
-        linear-gradient(
-            145deg,
-            #5a2e7d,
-            #3d1b5c
-        );
-
-    border:2px solid #7d4ab8;
-
-    box-shadow:
-        0 4px 12px rgba(100,40,150,.3),
-        inset 0 1px 0 rgba(255,255,255,.2);
-}
-
 #newBtn:hover:not(:disabled){
     transform:translateY(-2px);
-    box-shadow:
-        0 6px 16px rgba(100,40,150,.4),
-        inset 0 1px 0 rgba(255,255,255,.2);
+    box-shadow:0 6px 16px rgba(100,40,150,.4), inset 0 1px 0 rgba(255,255,255,.2);
 }
 
 #newBtn:active:not(:disabled){
     transform:translateY(0);
-    box-shadow:
-        0 2px 6px rgba(100,40,150,.3),
-        inset 0 1px 0 rgba(255,255,255,.2);
+    box-shadow:0 2px 6px rgba(100,40,150,.3), inset 0 1px 0 rgba(255,255,255,.2);
 }
 
 .buttons button:disabled{
@@ -856,25 +817,9 @@ le paquet reste donc parfaitement centré, quel que soit son nombre de cartes.
     cursor:not-allowed;
 }
 
-.buttons button::before{
-    content:"";
-    position:absolute;
-    inset:0;
-
-    background:
-        radial-gradient(
-            circle at 30% 30%,
-            rgba(255,255,255,.1) 0%,
-            transparent 70%
-        );
-
-    border-radius:14px;
-
-    pointer-events:none;
-}
-
 @media(max-width:600px){
     .buttons{
+        height:auto;
         gap:8px;
     }
 
