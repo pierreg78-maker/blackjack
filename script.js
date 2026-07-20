@@ -780,32 +780,51 @@ async function finishPayment(result) {
         blackjack: "blackjack naturel"
     };
 
-    try {
-        await registerMovement(
-            payout,
-            `Blackjack : ${labels[result]} (+${payout} pièces)`
-        );
+    /*
+       Comme pour la mise, l'animation démarre immédiatement.
+       L'enregistrement Google Sheets se fait en parallèle afin que
+       le joueur ne ressente pas la latence du réseau.
+    */
+    const winAnimationPromise =
+        window.AtelierMemoCoins?.showWin
+            ? Promise.resolve(
+                window.AtelierMemoCoins.showWin(payout)
+            ).catch(error => {
+                console.error(
+                    "Animation du gain impossible",
+                    error
+                );
+            })
+            : Promise.resolve();
 
-        if (window.AtelierMemoCoins?.showWin) {
-            await window.AtelierMemoCoins.showWin(payout);
-        }
+    const paymentPromise = registerMovement(
+        payout,
+        `Blackjack : ${labels[result]} (+${payout} pièces)`
+    );
 
+    const [paymentResult] = await Promise.allSettled([
+        paymentPromise,
+        winAnimationPromise
+    ]);
+
+    if (paymentResult.status === "fulfilled") {
         return true;
-
-    } catch (error) {
-        setSyncStatus(
-            `Gain de ${payout} pièces à vérifier : ` +
-            (error.message || "erreur de connexion"),
-            "error"
-        );
-
-        console.error(
-            "Paiement Blackjack non synchronisé",
-            { result, payout, settledBet, error }
-        );
-
-        return false;
     }
+
+    const error = paymentResult.reason;
+
+    setSyncStatus(
+        `Gain de ${payout} pièces à vérifier : ` +
+        (error?.message || "erreur de connexion"),
+        "error"
+    );
+
+    console.error(
+        "Paiement Blackjack non synchronisé",
+        { result, payout, settledBet, error }
+    );
+
+    return false;
 }
 
 /* =========================
