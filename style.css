@@ -157,9 +157,6 @@ h1::after{
     z-index:2;
 }
 
-.villageButton{
-    z-index:20;
-}
 
 @media(max-width:600px){
     #game{
