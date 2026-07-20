@@ -506,7 +506,7 @@ le paquet reste donc parfaitement centré, quel que soit son nombre de cartes.
 .card.card-hidden::after{
     --spade-accent: #f4d36c;
 
-    content:"♠";
+    content:"";
 
     position:absolute;
 
