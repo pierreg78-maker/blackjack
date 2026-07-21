@@ -1,23 +1,21 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Blackjack - Atelier Mémo</title>
-
-<link rel="stylesheet" href="./style.css?v=20260719-2">
-
+<link rel="stylesheet" href="./style.css?v=20260721-1">
 </head>
-
 <body>
 
 <div id="game">
 
-    <h1>❦ Blackjack ❦</h1>
-    <br><br><br><div class="topBar">
+    <header class="gameHeader">
+        <h1>❦ Blackjack ❦</h1>
+        <div class="titleDivider" aria-hidden="true"><span></span></div>
+    </header>
 
+    <div class="topBar">
         <div class="playerInfo">
             <div class="playerName">
                 👤 <span id="playerName">Profil non sélectionné</span>
@@ -30,15 +28,14 @@
         </div>
 
         <div class="betBox">
-    <span class="betLabel">Mise :</span>
+            <span class="betLabel">Mise :</span>
 
-    <div class="betChoices">
-        <button class="betButton active" data-bet="10">10</button>
-        <button class="betButton" data-bet="20">20</button>
-        <button class="betButton" data-bet="50">50</button>
-    </div>
-</div>
-
+            <div class="betChoices">
+                <button class="betButton active" data-bet="10">10</button>
+                <button class="betButton" data-bet="20">20</button>
+                <button class="betButton" data-bet="50">50</button>
+            </div>
+        </div>
     </div>
 
     <!-- Animation visuelle de la mise pendant la synchronisation -->
@@ -47,45 +44,35 @@
         <div class="betStageLabel">Mise en jeu…</div>
     </div>
 
-    <!-- ==================== -->
-    <!-- CROUPIER -->
-    <!-- ==================== -->
+    <main class="tableArea">
+        <section class="zone dealerZone">
+            <h2>Croupier</h2>
 
-    <div class="zone">
+            <div class="playRow">
+                <div class="cards" id="dealerCards"></div>
 
-        <h2>Croupier</h2>
+                <div class="scoreBox">
+                    Total<br>
+                    <span id="dealerScore">18</span>
+                </div>
+            </div>
+        </section>
 
-        <div class="playRow">
+        <div class="tableDivider" aria-hidden="true"><span></span></div>
 
-    <div class="cards" id="dealerCards"></div>
+        <section class="zone playerZone">
+            <h2>Vous</h2>
 
-   <div class="scoreBox">
-    Total<br>
-    <span id="dealerScore">18</span>
-</div>
+            <div class="playRow">
+                <div class="cards" id="playerCards"></div>
 
-</div>
-    </div>
-
-    <!-- ==================== -->
-    <!-- JOUEUR -->
-    <!-- ==================== -->
-
-    <!-- JOUEUR -->
-<div class="zone">
-    <h2>Vous</h2>
-
-    <div class="playRow">
-        <div class="cards" id="playerCards"></div>
-
-        <div class="scoreBox">
-            Total<br>
-            <span id="playerScore">0</span>
-        </div>
-    </div>
-</div>
-
-    <!-- ==================== -->
+                <div class="scoreBox">
+                    Total<br>
+                    <span id="playerScore">0</span>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <div id="syncStatus" class="syncStatus" aria-live="polite"></div>
 
@@ -93,32 +80,23 @@
         Chargement du profil…
     </div>
 
-    <!-- ==================== -->
-
     <div class="buttons">
-
-        <button id="dealBtn">
-            Distribuer
-        </button>
-
-        <button id="hitBtn" disabled>
-            Tirer
-        </button>
-
-        <button id="standBtn" disabled>
-            Rester
-        </button>
-
-        <button id="newBtn">
-            Nouvelle partie
-        </button>
-
+        <button id="dealBtn">Distribuer</button>
+        <button id="hitBtn" disabled>Tirer</button>
+        <button id="standBtn" disabled>Rester</button>
+        <button id="newBtn">Nouvelle partie</button>
     </div>
+
+    <footer class="gameFooter">
+        <a class="villageButton" href="../village/" aria-label="Retour au village">
+            <span class="villageIcon" aria-hidden="true">⌂</span>
+        </a>
+        <span class="villageText">Retour au village</span>
+    </footer>
 
 </div>
 
 <script src="./coin-animation.js?v=20260719-2"></script>
 <script src="./script.js?v=20260719-2"></script>
 </body>
-
 </html>
