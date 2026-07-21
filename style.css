@@ -1723,3 +1723,101 @@ h1{
         margin-left:-9px;
     }
 }
+
+
+/* ==========================================================
+   DERNIERE RETOUCHE DU LAYOUT : FOOTER CENTRE
+   ========================================================== */
+
+/* Les ornements inférieurs ne sont plus attachés aux boutons. */
+.buttons::before,
+.buttons::after{
+    content:none !important;
+    display:none !important;
+}
+
+.gameFooter{
+    position:relative;
+    isolation:isolate;
+    min-height:118px;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    margin-top:28px;
+    padding:20px 120px 26px;
+    border-top:2px solid rgba(205,157,42,.58);
+}
+
+.gameFooter::before,
+.gameFooter::after{
+    content:"";
+    position:absolute;
+    z-index:0;
+    bottom:-2px;
+    width:112px;
+    height:112px;
+    background-image:url("https://raw.githubusercontent.com/pierreg78-maker/AtelierMemo-Assets/refs/heads/main/assets/casino/casino-ui/Ornements/coin-cadre-or.svg");
+    background-repeat:no-repeat;
+    background-position:center;
+    background-size:contain;
+    pointer-events:none;
+    opacity:.9;
+    filter:drop-shadow(0 2px 2px rgba(57,31,3,.55));
+}
+
+.gameFooter::before{
+    left:2px;
+    transform:scaleY(-1);
+}
+
+.gameFooter::after{
+    right:2px;
+    transform:rotate(180deg);
+}
+
+.villageReturn{
+    position:relative;
+    z-index:2;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    color:#fff;
+    text-decoration:none;
+}
+
+.villageReturn:hover .villageButton,
+.villageReturn:focus-visible .villageButton{
+    transform:translateY(-2px) scale(1.03);
+    box-shadow:0 8px 15px rgba(0,0,0,.35);
+}
+
+.villageReturn:focus-visible{
+    outline:2px solid #ffe391;
+    outline-offset:6px;
+    border-radius:18px;
+}
+
+.villageButton{
+    position:static;
+    flex:0 0 auto;
+}
+
+@media(max-width:600px){
+    .gameFooter{
+        min-height:94px;
+        margin-top:15px;
+        padding:13px 82px 18px;
+    }
+
+    .gameFooter::before,
+    .gameFooter::after{
+        width:78px;
+        height:78px;
+        opacity:.84;
+    }
+
+    .villageReturn{
+        gap:10px;
+    }
+}
