@@ -54,6 +54,33 @@ const FLIP_DURATION = 560;
 let animationInProgress = false;
 
 /* =========================
+   SONS
+========================= */
+
+const SOUND_BASE =
+    "https://raw.githubusercontent.com/pierreg78-maker/AtelierMemo-Assets/main/assets/sons/";
+
+const sounds = {
+    distribuer: new Audio(SOUND_BASE + "cartes/distribuer-01.wav"),
+    retourner: new Audio(SOUND_BASE + "cartes/retourner.mp3"),
+    mise: new Audio(SOUND_BASE + "pieces-or/mise-01.wav"),
+    gain: new Audio(SOUND_BASE + "pieces-or/gain-01.mp3"),
+    jackpot: new Audio(SOUND_BASE + "pieces-or/jackpot.wav")
+};
+
+function playSound(name, volume = 1) {
+    const audio = sounds[name];
+    if (!audio) return;
+
+    try {
+        audio.pause();
+        audio.currentTime = 0;
+        audio.volume = volume;
+        audio.play().catch(() => {});
+    } catch (e) {}
+}
+
+/* =========================
    ÉTAT DU JEU
 ========================= */
 
@@ -589,7 +616,7 @@ function appendAnimatedCard(
         createCardElement(card, hidden);
 
     container.appendChild(cardElement);
-
+playSound("distribuer", 0.55);
     const direction =
         container === dealerCardsElement
             ? "left"
@@ -764,6 +791,13 @@ function getPayout(result) {
 
 async function finishPayment(result) {
     const payout = getPayout(result);
+   if (payout > 0) {
+    if (result === "blackjack") {
+        playSound("jackpot");
+    } else {
+        playSound("gain");
+    }
+}
     const settledBet = currentBet;
 
     currentBet = 0;
@@ -870,7 +904,7 @@ async function revealDealerCard() {
         );
 
     dealerCardHidden = false;
-
+playSound("retourner", 0.7);
     await flipDealerCard(
         hiddenCardElement,
         dealerHand[1]
@@ -900,7 +934,7 @@ async function startRound() {
     */
     const coinAnimation =
         window.AtelierMemoCoins || null;
-
+playSound("mise", 0.75);
     const coinArrival =
         coinAnimation
             ? coinAnimation.showBet(selectedBet)
