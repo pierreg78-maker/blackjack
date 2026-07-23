@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Blackjack - Atelier Mémo</title>
-<link rel="stylesheet" href="./style.css?v=20260721-2">
+<link rel="stylesheet" href="./style.css?v=20260722-1">
 </head>
 <body>
 
@@ -27,21 +27,6 @@
             </div>
         </div>
 
-        <div class="betBox">
-            <span class="betLabel">Mise :</span>
-
-            <div class="betChoices">
-                <button class="betButton active" data-bet="10">10</button>
-                <button class="betButton" data-bet="20">20</button>
-                <button class="betButton" data-bet="50">50</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Animation visuelle de la mise pendant la synchronisation -->
-    <div id="betStage" class="betStage" aria-hidden="true">
-        <div id="betPot" class="betPot"></div>
-        <div class="betStageLabel">Mise en jeu…</div>
     </div>
 
     <main class="tableArea">
@@ -58,7 +43,25 @@
             </div>
         </section>
 
-        <div class="tableDivider" aria-hidden="true"><span></span></div>
+        <div class="tableCenter" aria-label="Zone de mise">
+            <div class="centerOrnament" aria-hidden="true"></div>
+
+            <div class="betBox">
+                <span class="betLabel">Mise</span>
+
+                <div class="betChoices">
+                    <button class="betButton active" data-bet="10" aria-label="Miser 10 pièces">10</button>
+                    <button class="betButton" data-bet="20" aria-label="Miser 20 pièces">20</button>
+                    <button class="betButton" data-bet="50" aria-label="Miser 50 pièces">50</button>
+                </div>
+            </div>
+
+            <!-- Animation visuelle de la mise pendant la synchronisation -->
+            <div id="betStage" class="betStage" aria-hidden="true">
+                <div id="betPot" class="betPot"></div>
+                <div class="betStageLabel">Mise en jeu…</div>
+            </div>
+        </div>
 
         <section class="zone playerZone">
             <h2>Vous</h2>
@@ -98,7 +101,7 @@
 
 </div>
 
-<script src="./coin-animation.js?v=20260719-2"></script>
-<script src="./script.js?v=20260719-2"></script>
+<script src="./coin-animation.js?v=20260722-1"></script>
+<script src="./script.js?v=20260722-1"></script>
 </body>
 </html>
